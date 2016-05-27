@@ -1,0 +1,183 @@
+\documentclass[%
+  a4paper,%                                        % DIN A4
+  oneside,%                                        % einseitiger Druck
+  12pt,%                                           % 12pt Schriftgröße
+]{article}
+
+\usepackage[utf8]{inputenc}
+
+% include required packages
+\usepackage{url}
+\usepackage{array}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{xspace}
+\usepackage{tabularx}
+\usepackage{hyperref}
+%\usepackage{fancyhdr}
+\usepackage{multicol}
+\usepackage{capt-of}
+\usepackage{graphicx}
+\usepackage{float}
+
+% HTML compilation
+\usepackage{hevea}
+
+% font setup
+\usepackage{cmbright}
+\usepackage{txfonts}
+\usepackage[scaled=.90]{helvet}
+\usepackage{courier}
+
+% par. settings
+\parindent 0pt
+\parskip 8pt
+
+\pretolerance=150
+\tolerance=500
+\hbadness=752
+
+\definecolor{lightgrey}{rgb}{0.9,0.9,0.9}
+\definecolor{lightblue}{rgb}{0,0,1}
+
+\definecolor{grey}{rgb}{0.5,0.5,0.5}
+\definecolor{blue}{rgb}{0,0,1}
+\definecolor{violet}{rgb}{0.5,0,0.5}
+
+\definecolor{darkred}{rgb}{0.5,0,0}
+\definecolor{darkblue}{rgb}{0,0,0.5}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+
+
+\newcommand{\sref}[1]{\S\,\ref{#1}}
+\newcommand{\see}[1]{(see~\sref{#1})}
+\pagenumbering{arabic}
+
+\newcommand{\singlefig}[3]{%
+  \begin{figure}[H]%
+    \centering%
+    \imgsrc[width=600]{#1.png}%
+    \begin{latexonly}
+      \includegraphics[width=.6\columnwidth]{#1}%
+    \end{latexonly}
+    \caption{#2}%
+    \label{#3}%
+  \end{figure}%
+}
+
+\newcommand{\experimental}{{\color{darkred}$^{experimental}$}}
+
+\input{variables}
+
+\title{%
+%BEGIN LATEX
+\libtitle
+%END LATEX
+\libsubtitle}
+
+\author{Dominik Charousset}
+
+\date{\today}
+
+% page setup
+\setlength{\voffset}{-1in}
+\setlength{\hoffset}{-0.75in}
+\addtolength{\textwidth}{1.5in}
+\addtolength{\textheight}{2in}
+\setlength{\headheight}{15pt}
+
+% include paragraphs in TOC
+\setcounter{tocdepth}{3}
+
+% some HEVEA / HTML style sheets
+\newstyle{body}{width:800px;margin:auto;padding-top:20px;text-align: justify;}
+\newstyle{hr}{margin-top:10px;border-style:none;}
+
+% more compact itemize
+\newenvironment{itemize*}%
+  {\begin{itemize}%
+    \setlength{\itemsep}{0pt}%
+    \setlength{\parskip}{0pt}}%
+  {\end{itemize}}
+
+\begin{document}
+\maketitle\thispagestyle{empty}
+\pagestyle{empty}
+\clearpage
+\tableofcontents
+\clearpage
+\setcounter{page}{1}
+\pagestyle{plain}
+
+% new highlight for INI file syntax
+\lstdefinelanguage{ini}{%
+  basicstyle=\ttfamily\footnotesize,%
+%  columns=fullflexible,%
+  morecomment=[s][\color{blue}]{[}{]},%
+  morecomment=[l]{;},%
+  morecomment=[s]{<}{>},%
+  morestring=[b]",%
+  morestring=[b]',%
+  commentstyle=\color{violet},%
+  morekeywords={},%
+  otherkeywords={=,false,true},%
+  keywordstyle=\color{blue},%
+  stringstyle=\color{darkgreen},%
+}
+
+% code listings setup
+\lstset{%
+  language=C++,%
+  morekeywords={constexpr,nullptr,size_t,uint32_t,assert,override,final},%
+  basicstyle=\ttfamily\footnotesize,%
+  sensitive=true,%
+  keywordstyle=\color{blue},%
+  stringstyle=\color{darkgreen},%
+  commentstyle=\color{violet},%
+  showstringspaces=false,%
+  tabsize=2,%
+  frame=leftline,
+  rulecolor=\color{lightblue},
+  xleftmargin=20pt,
+}
+
+%BEGIN LATEX
+\lstset{
+  numberstyle=\tiny,
+  numbers=left,
+  numbersep=10pt,
+  xleftmargin=20pt,
+  %framesep=4.5mm,
+  %framexleftmargin=2.5mm,
+  framexleftmargin=5pt,
+  framesep=15pt,
+  fillcolor=\color{lightgrey},
+}
+%END LATEX
+
+% content
+\part{Core Library}
+\include{Introduction}
+\include{FirstSteps}
+\include{MessageHandlers}
+\include{Actors}
+\include{MessagePassing}
+\include{Scheduler}
+\include{Registry}
+\include{ReferenceCounting}
+\include{Error}
+\include{ConfiguringActorApplications}
+\include{Messages}
+\include{GroupCommunication}
+\include{ManagingGroupsOfWorkers}
+\include{ActorCompanions}
+\part{I/O Library}
+\include{NetworkTransparency}
+\include{Brokers}
+\part{Appendix}
+\include{FAQ}
+\include{CommonPitfalls}
+\include{UsingAout}
+\include{MigrationGuides}
+
+\end{document}

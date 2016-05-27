@@ -1,0 +1,78 @@
+\section{Middleman}
+\label{middleman}
+
+The middleman is the main component of the I/O module and enables distribution. It transparently manages proxy actor instances representing remote actors, maintains connections to other nodes, and takes care of serialization of messages. Applications install a middleman by loading \lstinline^caf::io::middleman^ as module~\see{system-config}. Users can include \lstinline^"caf/io/all.hpp"^ to get access to all public classes of the I/O module.
+
+\subsection{Class \texttt{middleman}}
+
+{\small
+\begin{tabular*}{\textwidth}{m{0.45\textwidth}m{0.5\textwidth}}
+  \multicolumn{2}{l}{\textbf{Observers}\vspace{3pt}} \\
+  \hline
+  \lstinline^size_t heartbeat_interval()^ & Returns the heartbeat interval in milliseconds. \\
+  \hline
+  \lstinline^bool enable_automatic_connections()^ & Returns whether middlemen try to establish a full mesh. \\
+  \hline
+  \\
+  \multicolumn{2}{l}{\textbf{Modifiers}\vspace{3pt}} \\
+  \hline
+  \lstinline^uint16 publish(T, uint16, cchar*, bool)^ & See~\sref{remoting}. \\
+  \hline
+  \lstinline^void unpublish(T x, uint16)^ & See~\sref{remoting}. \\
+  \hline
+  \lstinline^actor remote_actor(string, uint16)^ & See~\sref{remoting}. \\
+  \hline
+  \lstinline^T typed_remote_actor(string, uint16)^ & See~\sref{remoting}. \\
+  \hline
+  \lstinline^T spawn_broker(F fun, ...)^ & See~\sref{broker}. \\
+  \hline
+  \lstinline^T spawn_client(F, string, uint16, ...)^ & See~\sref{broker}. \\
+  \hline
+  \lstinline^T spawn_server(F, uint16, ...)^ & See~\sref{broker}. \\
+  \hline
+\end{tabular*}
+}
+
+\subsection{Publishing and Connecting}
+\label{remoting}
+
+The member function \lstinline^publish^ binds an actor to a given port, thereby allowing other nodes to access it over the network the network.
+
+\begin{lstlisting}
+template <class T>
+uint16_t publish(T x, uint16_t port,
+                 const char* in = nullptr,
+                 bool reuse_addr = false);
+\end{lstlisting}
+
+The first argument is a handle of type \lstinline^actor^ or \lstinline^typed_actor<...>^. The second argument denotes the TCP port. The OS will pick a random high-level port when passing 0. The third parameter configures the listening address. Passing null will accept all incoming connections (\lstinline^INADDR_ANY^). Finally, the flag \lstinline^reuse_addr^ controls the behavior when binding an IP address to a port, with the same semantics as the BSD socket flag \lstinline^SO_REUSEADDR^.
+For example, with \lstinline^reuse_addr = false^, binding two sockets to 0.0.0.0:42 and 10.0.0.1:42 will fail with \texttt{EADDRINUSE} since 0.0.0.0 includes 10.0.0.1. 
+With \lstinline^reuse_addr = true^ binding would succeed because 10.0.0.1 and
+0.0.0.0 are not literally equal addresses.
+
+\begin{lstlisting}
+template <class T>
+uint16_t unpublish(T x, uint16_t port = 0);
+\end{lstlisting}
+
+The member function \lstinline^unpublish^ allows actors to close a port manually. This is performed automatically if the published actor terminates. Passing 0 as second argument closes all ports an actor is published to, otherwise only one specific port is closed.
+
+\begin{lstlisting}
+actor remote_actor(std::string host, uint16_t port);
+
+template <class ActorHandle>
+ActorHandle typed_remote_actor(std::string host, uint16_t port);
+\end{lstlisting}
+
+After a server has published an actor with \lstinline^publish^, clients can connect to the published actor by calling \lstinline^remote_actor^ or \lstinline^typed_remote_actor^:
+
+\begin{lstlisting}
+// node A
+auto ping = spawn(ping);
+system.middleman().publish(ping, 4242);
+
+// node B
+auto ping = system.middleman().remote_actor("node A", 4242);
+\end{lstlisting}
+
+There is no difference between server and client after the connection phase. Remote actors use the same handle types as local actors and are thus fully transparent.

@@ -1,0 +1,15 @@
+*.DS_Store
+*.aux
+*.log
+variables.tex
+*.html
+manual.pdf
+*.4ct
+*.4tc
+*.dvi
+*.haux
+*.htoc
+*.idv
+*.lg
+*.tmp
+*.xref
