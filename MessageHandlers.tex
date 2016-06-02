@@ -50,7 +50,7 @@ constants, so-called \textit{atoms}, which have an unambiguous, special-purpose 
 
 Atoms in \lib are mapped to integer values at compile time.
 This mapping is guaranteed to be collision-free and invertible, but limits atom literals to ten characters and prohibits special characters.
-Legal characters are \lstinline[language=C++]^_0-9A-Za-z^ and the whitespace character.
+Legal characters are \lstinline^_0-9A-Za-z^ and the whitespace character.
 Atoms are created using the \lstinline^constexpr^ function \lstinline^atom^, as the following example illustrates.
 
 \begin{lstlisting}
