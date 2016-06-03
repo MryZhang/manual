@@ -1,7 +1,7 @@
 \section{Registry}
 \label{registry}
 
-The actor registry in \lib keeps track of the number of running actors and allows to map actors to their ID or a custom atom~\see{atom} representing a name. The registry does \emph{not} contain all actors. Actors have to be stored in the registry explicitly. Users can access the registry through an actor system by calling \lstinline^system.registry()^. The registry stores actors using \lstinline^strong_actor_ptr^~\see{actor-pointer}.
+The actor registry in \lib keeps track of the number of running actors and allows to map actors to their ID or a custom atom~\see{atom} representing a name. The registry does \emph{not} contain all actors. Actors have to be stored in the registry explicitly. Users can access the registry through an actor system by calling \lstinline^system.registry()^. The registry stores actors using \lstinline^strong_actor_ptr^ \see{actor-pointer}.
 
 Users can use the registry to make actors system-wide available by name. The middleman~\see{middleman} uses the registry to keep track of all actors known to remote nodes in order to serialize and deserialize them. Actors are removed automatically when they terminate.
 

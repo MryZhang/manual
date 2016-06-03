@@ -61,12 +61,12 @@ An actor handle contains the address of an actor along with its type information
 
 In a few instances, \lib uses \lstinline^strong_actor_ptr^ to refer to an actor using \emph{strong reference semantics} \see{reference-counting} without knowing the proper handle type. Pointers must be converted to a handle via \lstinline^actor_cast^ \see{actor-cast} prior to sending messages. A \lstinline^strong_actor_ptr^ can be \emph{null}.
 
-\subsubsection{Spawn}
+\subsubsection{Spawning}
 
 ``Spawning'' an actor means to create and run a new actor.
 
 \subsubsection{Monitor}
-\label{sec:monitoring}
+\label{monitoring}
 
 A monitored actor sends a down message~\see{down-message} to all actors monitoring it as part of its termination.
 This allows actors to supervise other actors and to take actions when one of the supervised actors fails, i.e., terminates with a non-normal exit reason.

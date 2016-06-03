@@ -45,7 +45,7 @@ Bidirectional monitoring with a strong lifetime coupling is established by calli
 \subsubsection{Error Handler}
 \label{error-message}
 
-Actors send error messages to others by returning an \lstinline^error^~\see{error} from a message handler. Similar to exit messages, error messages usually cause the receiving actor to terminate, unless a custom handler was installed via \lstinline^set_error_handler(f)^, where \lstinline^f^ is a function object with signature \lstinline^void (error&)^ or \lstinline^void (local_actor*, error&)^. Additionally, \lstinline^request^ accepts an error handler as second argument to handle errors for a particular request~\see{error-response}. The default handler is used as fallback if \lstinline^request^ is used without error handler. 
+Actors send error messages to others by returning an \lstinline^error^ \see{error} from a message handler. Similar to exit messages, error messages usually cause the receiving actor to terminate, unless a custom handler was installed via \lstinline^set_error_handler(f)^, where \lstinline^f^ is a function object with signature \lstinline^void (error&)^ or \lstinline^void (local_actor*, error&)^. Additionally, \lstinline^request^ accepts an error handler as second argument to handle errors for a particular request~\see{error-response}. The default handler is used as fallback if \lstinline^request^ is used without error handler. 
 
 \subsubsection{Default Handler}
 \label{default-handler}
@@ -60,24 +60,24 @@ A main feature of \lib is its ability to couple input and output types via the t
 \subsubsection{Sending Requests and Handling Responses}
 \label{handling-response}
 
-Actors send request messages by calling \lstinline^request(receiver, timeout, content...)^. This function returns an intermediate object that allows an actor to set a one-shot handler for the response message. Event-based actors can use either \lstinline^request(...).then^ or \lstinline^request(...).await^. The former multiplexes the one-shot handler with the regular actor behavior and handles requests as they arrive. The latter suspends the regular actor behavior until all awaited responses arrive and handles requests in LIFO order. Blocking actors always use \lstinline^request(...).receive^, which blocks until the one-shot handler was called. Actors receive a \lstinline^sec::request_timeout^~\see{sec} error message~\see{error-message} if a timeout occurs. Users can set the timeout to \lstinline^infinite^ for unbound operations. This is only recommended if the receiver is running locally.
+Actors send request messages by calling \lstinline^request(receiver, timeout, content...)^. This function returns an intermediate object that allows an actor to set a one-shot handler for the response message. Event-based actors can use either \lstinline^request(...).then^ or \lstinline^request(...).await^. The former multiplexes the one-shot handler with the regular actor behavior and handles requests as they arrive. The latter suspends the regular actor behavior until all awaited responses arrive and handles requests in LIFO order. Blocking actors always use \lstinline^request(...).receive^, which blocks until the one-shot handler was called. Actors receive a \lstinline^sec::request_timeout^ \see{sec} error message~\see{error-message} if a timeout occurs. Users can set the timeout to \lstinline^infinite^ for unbound operations. This is only recommended if the receiver is running locally.
 
 In our following example, we use the simple cell actors shown below as communication endpoints.
 
-\lstinputlisting[firstline=20,lastline=37]{../examples/message_passing/request.cpp}
+\lstinputlisting[linerange={20-37}]{../examples/message_passing/request.cpp}
 
 The first part of the example illustrates how event-based actors can use either \lstinline^then^ or \lstinline^await^.
 
-\lstinputlisting[firstline=39,lastline=51]{../examples/message_passing/request.cpp}
+\lstinputlisting[linerange={39-51}]{../examples/message_passing/request.cpp}
 
 \clearpage
 The second half of the example shows a blocking actor making use of \lstinline^receive^.
 
-\lstinputlisting[firstline=53,lastline=58]{../examples/message_passing/request.cpp}
+\lstinputlisting[linerange={53-58}]{../examples/message_passing/request.cpp}
 
 We spawn five cells and assign the values 0, 1, 4, 9, and 16.
 
-\lstinputlisting[firstline=62,lastline=64]{../examples/message_passing/request.cpp}
+\lstinputlisting[linerange={62-64}]{../examples/message_passing/request.cpp}
 
 When passing the \lstinline^cells^ vector to our three different implementations, we observe three outputs. Our \lstinline^waiting_testee^ actor will always print:
 

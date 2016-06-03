@@ -5,7 +5,7 @@ When managing a set of workers, a central actor often dispatches requests to a s
 For this purpose, the class \lstinline^actor_pool^ implements a lightweight abstraction for managing a set of workers using a dispatching policy. Unlike groups, pools usually own their workers.
 
 Pools are created using the static member function \lstinline^make^, which takes either one argument (the policy) or three (number of workers, factory function for workers, and dispatching policy).
-After construction, one can add new workers via messages of the form $('SYS', 'PUT', worker)$, remove workers with $('SYS', 'DELETE', worker)$, and retrieve the set of workers as \lstinline^vector<actor>^ via $('SYS', 'GET')$. 
+After construction, one can add new workers via messages of the form \lstinline^('SYS', 'PUT', worker)^, remove workers with \lstinline^('SYS', 'DELETE', worker)^, and retrieve the set of workers as \lstinline^vector<actor>^ via \lstinline^('SYS', 'GET')^. 
 
 For example, \lstinline^send(my_pool, sys_atom::value, put_atom::value, worker)^ adds \lstinline^worker^ to \lstinline^my_pool^.
 

@@ -46,7 +46,7 @@ In this way, the last three functions enable developers to gain fine-grained ins
 \subsection{Work Stealing}
 \label{work-stealing}
 
-The default policy in \lib is work stealing. The key idea of this algorithm is to remove the bottleneck of a single, global work queue.  The original algorithm was developed for fully strict computations by Blumofe et al in 1994. It schedules any number of tasks to $P$ workers, where $P$ is the number of processors available.
+The default policy in \lib is work stealing. The key idea of this algorithm is to remove the bottleneck of a single, global work queue.  The original algorithm was developed for fully strict computations by Blumofe et al in 1994. It schedules any number of tasks to \lstinline^P^ workers, where \lstinline^P^ is the number of processors available.
 
 \singlefig{stealing}{Stealing of work items}{fig-stealing}
 

@@ -11,7 +11,7 @@ Before discussing the approach to shared ownership in \lib, we look at the desig
 
 \singlefig{shared_ptr}{Shared pointer design in the C++ standard library}{shared-ptr}
 
-Figure~\ref{shared-ptr} depicts the default memory layout when using shared pointers. The control block is allocated separately from the data and thus stores a pointer to the data. This is when using manually-allocated objects, for example \lstinline^shared_ptr<int> iptr{new int}^. The benefit of this design is that one can destroy \lstinline^T^ independently from its control block. While irrelevant for small objects, it can become an issue for large objects. Notably, the shared pointer stores two pointers internally. Otherwise, dereferencing it would require to get the data location from the control block first.
+The figure above depicts the default memory layout when using shared pointers. The control block is allocated separately from the data and thus stores a pointer to the data. This is when using manually-allocated objects, for example \lstinline^shared_ptr<int> iptr{new int}^. The benefit of this design is that one can destroy \lstinline^T^ independently from its control block. While irrelevant for small objects, it can become an issue for large objects. Notably, the shared pointer stores two pointers internally. Otherwise, dereferencing it would require to get the data location from the control block first.
 
 \singlefig{make_shared}{Memory layout when using \lstinline^std::make_shared^}{make-shared}
 
