@@ -5,11 +5,9 @@ Errors in \lib have a code and a category, similar to \lstinline^std::error_code
 
 \subsection{Class Interface}
 
-The class \lstinline^error^ has the following member functions.
-
 {\small
-\begin{tabular*}{\textwidth}{m{0.45\textwidth}m{0.5\textwidth}}
-  \multicolumn{2}{l}{\textbf{Constructors}\vspace{3pt}} \\
+\begin{tabular}{ll}
+  \textbf{Constructors} & ~ \\
   \hline
   \lstinline^(Enum x)^ & Construct error by calling \lstinline^make_error(x)^ \\
   \hline
@@ -17,8 +15,7 @@ The class \lstinline^error^ has the following member functions.
   \hline
   \lstinline^(uint8_t x, atom_value y, message z)^ & Construct error with code \lstinline^x^, category \lstinline^y^, and context \lstinline^z^ \\
   \hline
-  \\
-  \multicolumn{2}{l}{\textbf{Observers}\vspace{3pt}} \\
+  ~ & ~ \\ \textbf{Observers} & ~ \\
   \hline
   \lstinline^uint8_t code()^ & Returns the error code \\
   \hline
@@ -28,7 +25,7 @@ The class \lstinline^error^ has the following member functions.
   \hline
   \lstinline^explicit operator bool()^ & Returns \lstinline^code() != 0^ \\
   \hline
-\end{tabular*}
+\end{tabular}
 }
 
 \subsection{Add Custom Error Categories}

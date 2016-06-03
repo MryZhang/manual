@@ -34,27 +34,43 @@ The function \lstinline^spawn_broker^ simply spawns a broker. The convenience fu
 \subsection{Class \texttt{broker}}
 \label{broker-class}
 
-{\small
-\begin{tabular*}{\textwidth}{m{0.51\textwidth}m{0.44\textwidth}}
-  \multicolumn{2}{l}{\textbf{Modifiers}\vspace{3pt}} \\
-  \\
-  \hline
-  \lstinline^void configure_read(^ \lstinline^connection_handle hdl,^ \lstinline^receive_policy::config config)^ & Modifies the receive policy for the connection identified by \lstinline^hdl^. This will cause the middleman to enqueue the next \lstinline^new_data_msg^ according to the given \lstinline^config^ created by \lstinline^receive_policy::exactly(x)^, \lstinline^receive_policy::at_most(x)^, or \lstinline^receive_policy::at_least(x)^ (with \lstinline^x^ denoting the number of bytes) \\
-  \hline
-  \lstinline^void write(connection_handle hdl,^ \lstinline^size_t num_bytes,^ \lstinline^const void* buf)^ & Writes data to the output buffer \\
-  \hline
-  \lstinline^void flush(connection_handle hdl)^ & Sends the data from the output buffer \\
-  \hline
-  \lstinline^template <class F, class... Ts>^ \lstinline^actor fork(F fun,^ \lstinline^connection_handle hdl, Ts&&... xs)^ & Spawns a new broker that takes ownership of given connection \\
-  \hline
-  \lstinline^size_t num_connections()^ & Returns the number of open connections \\
-  \hline
-  \lstinline^void close(connection_handle hdl)^ & Closes a connection \\
-  \hline
-  \lstinline^void close(accept_handle hdl)^ & Closes an acceptor \\
-  \hline
-\end{tabular*}
-}
+\begin{lstlisting}
+void configure_read(connection_handle hdl, receive_policy::config config)
+\end{lstlisting}
+
+Modifies the receive policy for the connection identified by \lstinline^hdl^. This will cause the middleman to enqueue the next \lstinline^new_data_msg^ according to the given \lstinline^config^ created by \lstinline^receive_policy::exactly(x)^, \lstinline^receive_policy::at_most(x)^, or \lstinline^receive_policy::at_least(x)^ (with \lstinline^x^ denoting the number of bytes).
+
+\begin{lstlisting}
+void write(connection_handle hdl, size_t num_bytes, const void* buf)
+\end{lstlisting}
+
+Writes data to the output buffer.
+
+\begin{lstlisting}
+void flush(connection_handle hdl)
+\end{lstlisting}
+
+Sends the data from the output buffer.
+
+\begin{lstlisting}
+template <class F, class... Ts>
+actor fork(F fun, connection_handle hdl, Ts&&... xs)
+\end{lstlisting}
+
+Spawns a new broker that takes ownership of given connection.
+
+\begin{lstlisting}
+size_t num_connections()
+\end{lstlisting}
+
+Returns the number of open connections.
+
+\begin{lstlisting}
+void close(connection_handle hdl)
+void close(accept_handle hdl)
+\end{lstlisting}
+
+Closes a connection or acceptor.
 
 \clearpage
 \subsection{Broker-related Message Types}

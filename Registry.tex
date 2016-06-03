@@ -8,13 +8,12 @@ Users can use the registry to make actors system-wide available by name. The mid
 It is worth mentioning that the registry is not synchronized between connected actor system. Each actor system has its own, local registry in a distributed setting.
 
 {\small
-\begin{tabular*}{\textwidth}{m{0.45\textwidth}m{0.5\textwidth}}
-  \multicolumn{2}{l}{\textbf{Types}\vspace{3pt}} \\
+\begin{tabular}{ll}
+  \textbf{Types} & ~ \\
   \hline
   \lstinline^name_map^ & \lstinline^unordered_map<atom_value, strong_actor_ptr>^ \\
   \hline
-  \\
-  \multicolumn{2}{l}{\textbf{Observers}\vspace{3pt}} \\
+  ~ & ~ \\ \textbf{Observers} & ~ \\
   \hline
   \lstinline^strong_actor_ptr get(actor_id)^ & Returns the actor associated to given ID. \\
   \hline
@@ -24,8 +23,7 @@ It is worth mentioning that the registry is not synchronized between connected a
   \hline
   \lstinline^size_t running()^ & Returns the number of currently running actors. \\
   \hline
-  \\
-  \multicolumn{2}{l}{\textbf{Modifiers}\vspace{3pt}} \\
+  ~ & ~ \\ \textbf{Modifiers} & ~ \\
   \hline
   \lstinline^void put(actor_id, strong_actor_ptr)^ & Maps an actor to its ID. \\
   \hline
@@ -35,5 +33,5 @@ It is worth mentioning that the registry is not synchronized between connected a
   \hline
   \lstinline^void erase(atom_value)^ & Removes a name mapping from the registry. \\
   \hline
-\end{tabular*}
+\end{tabular}
 }

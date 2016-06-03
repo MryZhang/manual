@@ -95,24 +95,24 @@ Further, actor handles of type \lstinline^A^ are assignable to handles of type \
 For convenience, the class \lstinline^typed_actor<...>^ defines the member types shown below to grant access to derived types.
 
 {\small
-\begin{tabular*}{\textwidth}{m{0.45\textwidth}m{0.5\textwidth}}
-  \textbf{Member Type or Template Alias} & \textbf{Definition} \\
+\begin{tabular}{ll}
+  \textbf{Types} & ~ \\
   \hline
   \lstinline^behavior_type^ & A statically typed set of message handlers. \\
   \hline
-  \lstinline^base^ & Possible base class for actors implementing this interface, i.e., \lstinline^typed_event_based_actor<...>^. \\
+  \lstinline^base^ & Base type for actors, i.e., \lstinline^typed_event_based_actor<...>^. \\
   \hline
   \lstinline^pointer^ & A pointer of type \lstinline^base*^. \\
   \hline
-  \lstinline^template <class State>^\newline\lstinline^stateful_base^ & Alternative base class when working with the stateful actor API, see \sref{stateful-actor}. \\
+  \lstinline^stateful_base<T>^ & See \sref{stateful-actor}. \\
   \hline
-  \lstinline^template <class State>^\newline\lstinline^stateful_pointer^ & A pointer of type \lstinline^stateful_base<State>*^. \\
+  \lstinline^stateful_pointer<T>^ & A pointer of type \lstinline^stateful_base<T>*^. \\
   \hline
-  \lstinline^template <class... Ts>^\newline\lstinline^extend^ & A new \lstinline^typed_actor<...>^ combining the current interface with \lstinline^Ts...^, where each \lstinline^T^ is a \lstinline^replies_to<...>::with<...>^. \\
+  \lstinline^extend<Ts...>^ & Extend this typed actor with \lstinline^Ts...^. \\
   \hline
-  \lstinline^template <class... Others>^\newline\lstinline^extend_with^ & A new \lstinline^typed_actor<...>^ combining the current interface with the interfaces \lstinline^Others^. \\
+  \lstinline^extend_with<Other>^ & Extend this typed actor with all cases from \lstinline^Other^. \\
   \hline
-\end{tabular*}
+\end{tabular}
 }
 
 \clearpage
@@ -223,21 +223,22 @@ Note that the message handler passed to \lstinline^receive^ is a temporary objec
 Hence, calling \lstinline^receive^ inside a loop creates an unnecessary amount of short-lived objects.
 \lib provides three predefined receive loops to provide a more efficient way of defining loops.
 
-\begin{tabular*}{\textwidth}{p{0.47\textwidth}|p{0.47\textwidth}}
-\lstinline^// DON'T^ & \lstinline^// DO^ \\
 \begin{lstlisting}
+// BAD
 for (;;) {
   receive (
     // ...
   );
 }
-\end{lstlisting} & %
-\begin{lstlisting}
+
+// GOOD
 receive_loop (
   // ...
 );
-\end{lstlisting} \\
+\end{lstlisting}
+
 \begin{lstlisting}
+// BAD
 std::vector<int> results;
 for (size_t i = 0; i < 10; ++i) {
   receive (
@@ -246,8 +247,8 @@ for (size_t i = 0; i < 10; ++i) {
     }
   );
 }
-\end{lstlisting} & %
-\begin{lstlisting}
+
+// GOOD
 std::vector<int> results;
 size_t i = 0;
 receive_for(i, 10) (
@@ -255,8 +256,11 @@ receive_for(i, 10) (
     results.push_back(value);
   }
 );
-\end{lstlisting} \\
+\end{lstlisting}
+
+\clearpage
 \begin{lstlisting}
+// BAD
 size_t received = 0;
 do {
   receive (
@@ -265,16 +269,15 @@ do {
     }
   );
 } while (received < 10);
-\end{lstlisting} & %
-\begin{lstlisting}
+
+// GOOD
 size_t received = 0;
 do_receive (
   [&](int) {
     ++received;
   }
 ).until([&] { return received >= 10; });
-\end{lstlisting} \\
-\end{tabular*}
+\end{lstlisting}
 
 The examples above illustrate the correct usage of the three loops \lstinline^receive_loop^, \lstinline^receive_for^ and \lstinline^do_receive(...).until^.
 It is possible to nest receives and receive loops.

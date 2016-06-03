@@ -12,13 +12,12 @@ All builtin types in \lib have a non-zero 16-bit \emph{type number}. All user-de
 \subsection{Class \texttt{type\_erased\_tuple}}
 
 {\small
-\begin{tabular*}{\textwidth}{m{0.45\textwidth}m{0.5\textwidth}}
-  \multicolumn{2}{l}{\textbf{Types}\vspace{3pt}} \\
+\begin{tabular}{ll}
+  \textbf{Types} & ~ \\
   \hline
-  \lstinline^rtti_pair^ & \lstinline^std::pair<uint16_t, const std::type_info*>^. \\
+  \lstinline^rtti_pair^ & \lstinline^std::pair<uint16_t, const std::type_info*>^ \\
   \hline
-  \\
-  \multicolumn{2}{l}{\textbf{Observers}\vspace{3pt}} \\
+  ~ & ~ \\ \textbf{Observers} & ~ \\
   \hline
   \lstinline^bool empty()^ & Returns whether this message is empty. \\
   \hline
@@ -38,100 +37,94 @@ All builtin types in \lib have a non-zero 16-bit \emph{type number}. All user-de
   \hline
   \lstinline^bool matches(size_t n, rtti_pair)^ & Checks whether the nth element has given type. \\
   \hline
-  \\
-  \multicolumn{2}{l}{\textbf{Modifiers}\vspace{3pt}} \\
+  ~ & ~ \\ \textbf{Modifiers} & ~ \\
   \hline
   \lstinline^void* get_mutable(size_t n)^ & Returns a mutable pointer to the nth element. \\
   \hline
   \lstinline^void load(deserializer& x)^ & Reads the tuple from \lstinline^x^. \\
   \hline
-\end{tabular*}
+\end{tabular}
 }
 
 \subsection{Class \texttt{message}}
 
 {\small
-\begin{tabular*}{\textwidth}{m{0.45\textwidth}m{0.5\textwidth}}
-  \multicolumn{2}{m{\linewidth}}{\large{\textbf{Member functions}}\vspace{3pt}} \\
-  \\
-  \multicolumn{2}{l}{\textbf{Observers}\vspace{3pt}} \\
+\begin{tabular}{ll}
+  \textbf{Observers} & ~ \\
   \hline
-  \lstinline^bool empty()^ & Returns whether this message is empty \\
+  \lstinline^bool empty()^ & Returns whether this message is empty. \\
   \hline
-  \lstinline^size_t size()^ & Returns the size of this message \\
+  \lstinline^size_t size()^ & Returns the size of this message. \\
   \hline
-  \lstinline^const void* at(size_t p)^ & Returns a const pointer to the element at position \lstinline^p^ \\
+  \lstinline^const void* at(size_t p)^ & Returns a const pointer to the element at position \lstinline^p^. \\
   \hline
-  \lstinline^template <class T>^ \lstinline^const T& get_as(size_t p)^ & Returns a const ref. to the element at position \lstinline^p^ \\
+  \lstinline^const T& get_as<T>(size_t p)^ & Returns a const ref. to the element at position \lstinline^p^. \\
   \hline
-  \lstinline^template <class T>^ \lstinline^bool match_element(size_t p)^ & Returns whether the element at position \lstinline^p^ has type \lstinline^T^ \\
+  \lstinline^bool match_element<T>(size_t p)^ & Returns whether the element at position \lstinline^p^ has type \lstinline^T^. \\
   \hline
-  \lstinline^template <class... Ts>^ \lstinline^bool match_elements()^ & Returns whether this message has the types \lstinline^Ts...^ \\
+  \lstinline^bool match_elements<Ts...>()^ & Returns whether this message has the types \lstinline^Ts...^. \\
   \hline
-  \lstinline^message drop(size_t n)^ & Creates a new message with all but the first \lstinline^n^ values \\
+  \lstinline^message drop(size_t n)^ & Creates a new message with all but the first \lstinline^n^ values. \\
   \hline
-  \lstinline^message drop_right(size_t n)^ & Creates a new message with all but the last \lstinline^n^ values \\
+  \lstinline^message drop_right(size_t n)^ & Creates a new message with all but the last \lstinline^n^ values. \\
   \hline
-  \lstinline^message take(size_t n)^ & Creates a new message from the first \lstinline^n^ values \\
+  \lstinline^message take(size_t n)^ & Creates a new message from the first \lstinline^n^ values. \\
   \hline
-  \lstinline^message take_right(size_t n)^ & Creates a new message from the last \lstinline^n^ values \\
+  \lstinline^message take_right(size_t n)^ & Creates a new message from the last \lstinline^n^ values. \\
   \hline
-  \lstinline^message slice(size_t p, size_t n)^ & Creates a new message from \lstinline^[p, p + n)^ \\
+  \lstinline^message slice(size_t p, size_t n)^ & Creates a new message from \lstinline^[p, p + n)^. \\
   \hline
-  \lstinline^message slice(size_t p, size_t n)^ & Creates a new message from \lstinline^[p, p + n)^ \\
+  \lstinline^message slice(size_t p, size_t n)^ & Creates a new message from \lstinline^[p, p + n)^. \\
   \hline
-  \lstinline^message extract(message_handler)^ & See \sref{extract} \\
+  \lstinline^message extract(message_handler)^ & See \sref{extract}. \\
   \hline
-  \lstinline^message extract_opts(...)^ & See \sref{extract-opts} \\
+  \lstinline^message extract_opts(...)^ & See \sref{extract-opts}. \\
   \hline
-  \\
-  \multicolumn{2}{l}{\textbf{Modifiers}\vspace{3pt}} \\
+  ~ & ~ \\ \textbf{Modifiers} & ~ \\
   \hline
-  \lstinline^optional<message>^ \lstinline^apply(message_handler f)^ & Returns \lstinline^f(*this)^ \\
+  \lstinline^optional<message> apply(message_handler f)^ & Returns \lstinline^f(*this)^. \\
   \hline
-  \lstinline^void* mutable_at(size_t p)^ & Returns a pointer to the element at position p \\
+  \lstinline^void* mutable_at(size_t p)^ & Returns a pointer to the element at position p. \\
   \hline
-  \lstinline^template <class T>^ \lstinline^T& get_as_mutable(size_t p)^ & Returns a reference to the element at position p \\
+  \lstinline^T& get_as_mutable<T>(size_t p)^ & Returns a reference to the element at position p. \\
   \hline
-\end{tabular*}
+\end{tabular}
 }
 
 \clearpage
 \subsection{Class \texttt{message\_builder}}
 
 {\small
-\begin{tabular*}{\textwidth}{m{0.45\textwidth}m{0.5\textwidth}}
-  \multicolumn{2}{l}{\textbf{Constructors}\vspace{3pt}} \\
+\begin{tabular}{ll}
+  \textbf{Constructors} & ~ \\
   \hline
-  \lstinline^()^ & Creates an empty message builder \\
+  \lstinline^(void)^ & Creates an empty message builder. \\
   \hline
-  \lstinline^template <class Iter>^ \lstinline^(Iter first, Iter last)^ & Adds all elements from range \lstinline^[first, last)^ \\
+  \lstinline^(Iter first, Iter last)^ & Adds all elements from range \lstinline^[first, last)^. \\
   \hline
-  \\
-  \multicolumn{2}{l}{\textbf{Observers}\vspace{3pt}} \\
+  ~ & ~ \\ \textbf{Observers} & ~ \\
   \hline
-  \lstinline^bool empty()^ & Returns whether this message is empty \\
+  \lstinline^bool empty()^ & Returns whether this message is empty. \\
   \hline
-  \lstinline^size_t size()^ & Returns the size of this message \\
+  \lstinline^size_t size()^ & Returns the size of this message. \\
   \hline
-  \lstinline^message to_message(	)^ & Converts the buffer to an actual message object \\
+  \lstinline^message to_message(	)^ & Converts the buffer to an actual message object. \\
   \hline
-  \lstinline^template <class T>^ \lstinline^append(T val)^ & Adds \lstinline^val^ to the buffer \\
+  \lstinline^append(T val)^ & Adds \lstinline^val^ to the buffer. \\
   \hline
-  \lstinline^template <class Iter>^ \lstinline^append(Iter first, Iter last)^ & Adds all elements from range \lstinline^[first, last)^ \\
+  \lstinline^append(Iter first, Iter last)^ & Adds all elements from range \lstinline^[first, last)^. \\
   \hline
-  \lstinline^message extract(message_handler)^ & See \sref{extract} \\
+  \lstinline^message extract(message_handler)^ & See \sref{extract}. \\
   \hline
-  \lstinline^message extract_opts(...)^ & See \sref{extract-opts} \\
+  \lstinline^message extract_opts(...)^ & See \sref{extract-opts}. \\
   \hline
-  \\
-  \multicolumn{2}{l}{\textbf{Modifiers}\vspace{3pt}} \\
+  ~ & ~ \\ \textbf{Modifiers} & ~ \\
   \hline
-  \lstinline^optional<message>^ \lstinline^apply(message_handler f)^ & Returns \lstinline^f(*this)^ \\
+  \lstinline^optional<message>^ \lstinline^apply(message_handler f)^ & Returns \lstinline^f(*this)^. \\
   \hline
-  \lstinline^message move_to_message()^ & Transfers ownership of its data to the new message \textbf{Warning}: this function leaves the builder in an \emph{invalid state}, i.e., calling any member function on it afterwards is undefined behavior \\
+  \lstinline^message move_to_message()^ & Transfers ownership of its data to the new message. \\
   \hline
-\end{tabular*}
+\end{tabular}
 }
 
 \clearpage

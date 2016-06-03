@@ -54,24 +54,34 @@ The reasoning behind this decision is that we already have projections to modify
 Guard expressions add little expressive power to the library but a whole lot of code that is hard to maintain in the long run due to its complexity.
 Using projections to not only perform type conversions but also to restrict values is the more natural choice.
 
-The following table summarizes the changes made to the API.
+\lstinline^any_tuple => message^
 
-\begin{tabular*}{\textwidth}{m{0.44\textwidth}m{0.48\textwidth}}
-  Change & Explanation \\
-  \hline
-  \lstinline^any_tuple => message^ & This type is only being used to pass a message from one actor to another. Hence, \lstinline^message^ is the logical name. \\
-  \hline
-  \lstinline^partial_function => ^ \lstinline^message_handler^ & Technically, it still is a partial function, but wanted to emphasize its use case in the library. \\
-  \hline
-  \lstinline^cow_tuple => X^ & We want to provide a streamlined, simple API. Shipping a full tuple abstraction with the library does not fit into this philosophy. The removal of \lstinline^cow_tuple^ implies the removal of related functions such as \lstinline^tuple_cast^. \\
-  \hline
-  \lstinline^cow_ptr => X^ & This pointer class is an implementation detail of \lstinline^message^ and should not live in the global namespace in the first place. It also had the wrong name, because it is intrusive. \\
-  \hline
-  \lstinline^X => message_builder^ & This new class can be used to create messages dynamically. For example, the content of a vector can be used to create a message using a series of \lstinline^append^ calls. \\
-  \hline
-  \lstinline^accept_handle^, \lstinline^connection_handle^, \lstinline^publish^, \lstinline^remote_actor^, \lstinline^max_msg_size^, \lstinline^typed_publish^, \lstinline^typed_remote_actor^, \lstinline^publish_local_groups^, \lstinline^new_connection_msg^, \lstinline^new_data_msg^, \lstinline^connection_closed_msg^, \lstinline^acceptor_closed_msg^ & These classes concern I/O functionality and have thus been moved to \lstinline^caf::io^. \\
-  \hline
-\end{tabular*}
+This type is only being used to pass a message from one actor to another. Hence, \lstinline^message^ is the logical name.
+
+\lstinline^partial_function => message_handler^
+
+Technically, it still is a partial function. However, we wanted to put emphasize on its use case.
+
+\lstinline^cow_tuple => X^
+
+We want to provide a streamlined, simple API. Shipping a full tuple abstraction with the library does not fit into this philosophy. The removal of \lstinline^cow_tuple^ implies the removal of related functions such as \lstinline^tuple_cast^.
+
+\lstinline^cow_ptr => X^
+
+This pointer class is an implementation detail of \lstinline^message^ and should not live in the global namespace in the first place. It also had the wrong name, because it is intrusive.
+
+\lstinline^X => message_builder^
+
+This new class can be used to create messages dynamically. For example, the content of a vector can be used to create a message using a series of \lstinline^append^ calls.
+
+
+\begin{lstlisting}
+accept_handle, connection_handle, publish, remote_actor,
+max_msg_size, typed_publish, typed_remote_actor, publish_local_groups,
+new_connection_msg, new_data_msg, connection_closed_msg, acceptor_closed_msg
+\end{lstlisting}
+
+These classes concern I/O functionality and have thus been moved to \lstinline^caf::io^
 
 \subsection{0.10 to 0.11}
 
