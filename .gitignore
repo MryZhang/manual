@@ -2,7 +2,9 @@
 *.aux
 *.log
 variables.tex
+conf.py
 *.html
+html
 manual.pdf
 *.4ct
 *.4tc

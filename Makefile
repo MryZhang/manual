@@ -1,18 +1,35 @@
 HEVEA=hevea
-VERSION=$(shell grep "\#define CAF_VERSION " ../libcaf_core/caf/config.hpp | awk '{ full=$$3; major=full/10000; minor=(full/100)%100; patch=full%100; printf("%d.%d.%d", int(major), int(minor), int(patch)) }')
 
-variables.tex : variables.tex.in
-	sed 's/@CAF_VERSION@/$(VERSION)/g' variables.tex.in > variables.tex
+SOURCES=Actors.tex Brokers.tex CommonPitfalls.tex ConfiguringActorApplications.tex Error.tex FAQ.tex FirstSteps.tex GroupCommunication.tex Introduction.tex ManagingGroupsOfWorkers.tex MessageHandlers.tex MessagePassing.tex Messages.tex MigrationGuides.tex NetworkTransparency.tex ReferenceCounting.tex Registry.tex Scheduler.tex UsingAout.tex
+RST_FILES=$(SOURCES:.tex=.rst)
 
-pdf : variables.tex
+# prevent make from building something without target
+none:
+
+manual.pdf: $(SOURCES) variables.tex
 	pdflatex manual
 	pdflatex manual
 	pdflatex manual
 
-html : variables.tex
+pdf: manual.pdf
+
+manual.html: $(SOURCES) variables.tex
 	hevea -fix manual
 
-clean:
-	rm -f *.htoc *.haux *.html *.aux *.log variables.tex
+html: manual.html
 
-.PHONY: clean
+%.rst: %.tex variables.tex explode_lstinputlisting.py filter.py
+	cat colors.tex variables.tex newcommands.tex $< | ./explode_lstinputlisting.py | pandoc --filter=./filter.py --wrap=none --listings -f latex -o $@
+
+rst : $(RST_FILES)
+
+sphinx: conf.py rst
+	sphinx-build -b html . html
+
+all: pdf html sphinx
+
+clean:
+	rm -rf *.htoc *.haux manual.html manual.pdf *.aux *.log $(RST_FILES) html/ _build _static _templates
+
+.PHONY: none all pdf html rst clean
+
