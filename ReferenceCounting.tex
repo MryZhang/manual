@@ -52,8 +52,7 @@ The syntax for \lstinline^actor_cast^ resembles builtin C++ casts. For example, 
 
 Cycles can occur only when using class-based actors when storing references to other actors via member variable. Stateful actors \see{stateful-actor} break cycles by destroying the state when an actor terminates, \emph{before} the destructor of the actor itself runs. This means an actor releases all references to others automatically after calling \lstinline^quit^. However, class-based actors have to break cycles manually, because references to others are not released until the destructor of an actor runs. Two actors storing references to each other via member variable produce a cycle and neither destructor can ever be called.
 
-Class-based actors can break cycles by overriding \lstinline^on_exit()^ and calling \lstinline^invalidate(x)^ on each handle \see{actor-handle}. Using a handle after invalidating it is undefined behavior.
-
+Class-based actors can break cycles manually by overriding \lstinline^on_exit()^ and calling \lstinline^destroy(x)^ on each handle~\see{actor-handle}. Using a handle after destroying it is undefined behavior, but it is safe to assign a new value to the handle.
 
 %TODO: Add use case for the following casting scenario.
 %There is one requirement of this design: `static_cast<abstract_actor*>(self)` must return the same pointer as `reinterpret_cast<abstract_actor*>(self)` for any actor `self`. Otherwise, our assumption that the actor object starts exactly 64 Bytes after its control block would break. Luckily, this boils down to a single limitation in practice: User-defined actors must not use virtual inheritance. When trying to spawn actors that do make use of virtual inheritance, \lib generates a compile-time error: `"actor subtype has illegal memory alignment (probably due to virtual inheritance)"`.
