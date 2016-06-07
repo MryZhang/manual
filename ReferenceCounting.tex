@@ -15,11 +15,11 @@ The figure above depicts the default memory layout when using shared pointers. T
 
 \singlefig{make_shared}{Memory layout when using \lstinline^std::make_shared^}{make-shared}
 
-When using \lstinline^make_shared^ or \lstinline^allocate_shared^, the standard library can store reference count and data in a single memory block as shown in Figure~\ref{make-shared}. However, \lstinline^shared_ptr^ still has to store two pointers, because it is unaware where the data is allocated.
+When using \lstinline^make_shared^ or \lstinline^allocate_shared^, the standard library can store reference count and data in a single memory block as shown above. However, \lstinline^shared_ptr^ still has to store two pointers, because it is unaware where the data is allocated.
 
 \singlefig{enable_shared_from_this}{Memory layout with \lstinline^std::enable_shared_from_this^}{enable-shared-from-this}
 
-Finally, the design of the standard library becomes convoluted when an object should be able to hand out a \lstinline^shared_ptr^ to itself. As shown in Figure~\ref{enable-shared-from-this}, classes must inherit from \lstinline^std::enable_shared_from_this^ to navigate from an object to its control block. This additional navigation path is required, because \lstinline^std::shared_ptr^ needs two pointers. One to the data and one to the control block. Programmers can still use \lstinline^make_shared^ for such objects, in which case the object is again stored along with the control block.
+Finally, the design of the standard library becomes convoluted when an object should be able to hand out a \lstinline^shared_ptr^ to itself. Classes must inherit from \lstinline^std::enable_shared_from_this^ to navigate from an object to its control block. This additional navigation path is required, because \lstinline^std::shared_ptr^ needs two pointers. One to the data and one to the control block. Programmers can still use \lstinline^make_shared^ for such objects, in which case the object is again stored along with the control block.
 
 \subsection{Smart Pointers to Actors}
 
@@ -37,9 +37,9 @@ The smart pointer design in \lib relies on a few assumptions about actor types. 
 
 \subsection{Strong and Weak References}
 
-A \emph{strong} reference manipulates the \lstinline^strong refs^ counter shown in Figure~\ref{actor-pointer}. An actor is destroyed if there are \emph{zero} strong references to it. If two actors keep strong references to each other via member variable, neither actor can ever be destroyed because they produce a cycle \see{breaking-cycles}. Strong references are formed by \lstinline^strong_actor_ptr^, \lstinline^actor^, and \lstinline^typed_actor<...>^ \see{actor-reference}.
+A \emph{strong} reference manipulates the \lstinline^strong refs^ counter shown agove. An actor is destroyed if there are \emph{zero} strong references to it. If two actors keep strong references to each other via member variable, neither actor can ever be destroyed because they produce a cycle \see{breaking-cycles}. Strong references are formed by \lstinline^strong_actor_ptr^, \lstinline^actor^, and \lstinline^typed_actor<...>^ \see{actor-reference}.
 
-A \emph{weak} reference manipulates the \lstinline^weak refs^ counter shown in Figure~\ref{actor-pointer}. This counter keeps track of how many references to the control block exist. The control block is destroyed if there are \emph{zero} weak references to an actor (which cannot occur before \lstinline^strong refs^ reached \emph{zero} as well). No cycle occurs if two actors keep weak references to each other, because the actor objects themselves can get destroyed independently from their control block.  A weak reference is only formed by \lstinline^actor_addr^ \see{actor-address}.
+A \emph{weak} reference manipulates the \lstinline^weak refs^ counter. This counter keeps track of how many references to the control block exist. The control block is destroyed if there are \emph{zero} weak references to an actor (which cannot occur before \lstinline^strong refs^ reached \emph{zero} as well). No cycle occurs if two actors keep weak references to each other, because the actor objects themselves can get destroyed independently from their control block.  A weak reference is only formed by \lstinline^actor_addr^ \see{actor-address}.
 
 \subsection{Converting Actor References with \texttt{actor\_cast}}
 
