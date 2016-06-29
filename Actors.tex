@@ -262,7 +262,7 @@ Implementing an actor using a class requires the following:
 
 Implementing actors with classes works for all kinds of actors and allows simple management of state via member variables. However, composing states via inheritance can get quite tedious. For dynamically typed actors, composing states is particularly hard, because the compiler cannot provide much help. For statically typed actors, \lib also provides an API for composable behaviors~\see{composable-behavior} that works well with inheritance. The following three examples implement the forward declarations shown in \sref{spawn}.
 
-\lstinputlisting[linerange={67-101}]{../examples/message_passing/calculator.cpp}
+\lstinputlisting[linerange={74-108}]{../examples/message_passing/calculator.cpp}
 
 \clearpage
 \subsection{Stateful Actors}
@@ -341,7 +341,7 @@ self->receive(
   [&](const exit_msg& x) {
     // ...
   },
-  others >> [](const type_erased_tuple* x) -> result<message> {
+  others >> [](message_view& x) -> result<message> {
     // report unexpected message back to client
     return sec::unexpected_message;
   }
