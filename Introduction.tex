@@ -66,12 +66,13 @@ In a few instances, \lib uses \lstinline^strong_actor_ptr^ to refer to an actor 
 ``Spawning'' an actor means to create and run a new actor.
 
 \subsubsection{Monitor}
-\label{monitoring}
+\label{monitor}
 
 A monitored actor sends a down message~\see{down-message} to all actors monitoring it as part of its termination.
 This allows actors to supervise other actors and to take actions when one of the supervised actors fails, i.e., terminates with a non-normal exit reason.
 
 \subsubsection{Link}
+\label{link}
 
 A link is a bidirectional connection between two actors.
 Each actor sends an exit message~\see{exit-message} to all of its links as part of its termination.

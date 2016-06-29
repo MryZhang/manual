@@ -23,18 +23,24 @@ Actors that utilize the blocking receive API always require an exclusive thread 
 All actors live in an \lstinline^actor_system^ representing an actor environment including scheduler~\see{scheduler}, registry~\see{registry}, and optional components such as a middleman~\see{middleman}. A single process can have multiple \lstinline^actor_system^ instances, but this is usually not recommended (a use case for multiple systems is to strictly separate two or more sets of actors by running them in different schedulers). For configuration and fine-tuning options of actor systems see \sref{system-config}. A distributed CAF application consists of two or more connected actor systems. We also refer to interconnected \lstinline^actor_system^ instances as a \emph{distributed actor system}.
 
 \clearpage
-\subsection{Common Actor Base Type}
+\subsection{Common Actor Base Types}
 
-The class \lstinline^local_actor^ is the base of all user-defined actors in \lib and defines all common operations.
-However, users of the library usually do not inherit from this class directly. Proper base classes for user-defined actors are \lstinline^event_based_actor^ or \lstinline^blocking_actor^.
+The following pseudo-UML depicts the class diagram for actors in \lib. Irrelevant member functions and classes as well as mixins are omitted for brevity. Selected individual classes are presented in more detail in the following sections.
 
-{\small
+\includegraphics[width=\textwidth]{actor_types}
+
+\clearpage
+\subsubsection{Class \lstinline^local_actor^}
+
+The class \lstinline^local_actor^ is the root type for all user-defined actors in \lib. It defines all common operations.
+However, users of the library usually do not inherit from this class directly. Proper base classes for user-defined actors are \lstinline^event_based_actor^ or \lstinline^blocking_actor^. The following table also includes member function inherited from \lstinline^monitorable_actor^ and \lstinline^abstract_actor^.
+
+\begin{center}
+\small
 \begin{tabular}{ll}
   \textbf{Types} & ~ \\
   \hline
   \lstinline^mailbox_type^ & A concurrent, many-writers-single-reader queue type. \\
-  \hline
-  \lstinline^error_handler^ & \lstinline^std::function<void (error&)>^ \\
   \hline
   ~ & ~ \\ \textbf{Constructors} & ~ \\
   \hline
@@ -42,34 +48,133 @@ However, users of the library usually do not inherit from this class directly. P
   \hline
   ~ & ~ \\ \textbf{Observers} & ~ \\
   \hline
-  \lstinline^actor_addr address()^ & Returns the address of this actor \\
+  \lstinline^actor_addr address()^ & Returns the address of this actor. \\
   \hline
-  \lstinline^bool trap_exit()^ & Checks whether this actor traps exit messages \\
+  \lstinline^actor_system& system()^ & Returns \lstinline^context()->system()^. \\
   \hline
-  \lstinline^vector<group> joined_groups()^ & Returns all subscribed groups \\
+  \lstinline^actor_system& home_system()^ & Returns the system that spawned this actor. \\
   \hline
-  ~ & ~ \\ \textbf{Modifiers} & ~ \\
+  \lstinline^execution_unit* context()^ & Returns underlying thread or current scheduler worker. \\
   \hline
-  \lstinline^quit(uint32_t reason = normal)^ & Finishes execution of this actor \\
+  ~ & ~ \\ \textbf{Customization Points} & ~ \\
   \hline
-  \lstinline^void trap_exit(bool enabled)^ & Enables or disables trapping of exit messages \\
+  \lstinline^on_exit()^ & Can be overridden to perform cleanup code. \\
   \hline
-  \lstinline^void join(const group&)^ & Subscribes to a group\\
+  \lstinline^const char* name()^ & Returns a debug name for this actor type. \\
   \hline
-  \lstinline^void leave(const group&)^ & Unsubscribes from a group \\
+  ~ & ~ \\ \textbf{Actor Management} & ~ \\
   \hline
-  \lstinline^void monitor(actor_addr)^ & Unidirectionally monitors an actor~\see{monitors} \\
+  \lstinline^link_to(other)^ & Link to an actor \see{link}. \\
   \hline
-  \lstinline^void demonitor(actor_addr whom)^ & Removes a monitor from \lstinline^whom^ \\
+  \lstinline^unlink_from(other)^ & Remove link to an actor \see{link}. \\
   \hline
-  \lstinline^void set_exception_handler(F)^ & Sets a custom handler for uncaught exceptions \\
+  \lstinline^monitor(other)^ & Unidirectionally monitors an actor \see{monitor}. \\
   \hline
-  \lstinline^void on_exit()^ & Can be overridden for performing cleanup code \\
+  \lstinline^demonitor(other)^ & Removes a monitor from \lstinline^whom^. \\
+  \hline
+  \lstinline^spawn(F fun, xs...)^ & Spawns a new actor from \lstinline^fun^. \\
+  \hline
+  \lstinline^spawn<T>(xs...)^ & Spawns a new actor of type \lstinline^T^. \\
+  \hline
+  ~ & ~ \\ \textbf{Message Processing} & ~ \\
+  \hline
+  \lstinline^T make_response_promise<Ts...>()^ & Allows an actor to delay its response message. \\
+  \hline
+  \lstinline^T response(xs...)^ & Convenience function for creating fulfilled promises. \\
   \hline
 \end{tabular}
-}
-\clearpage
+\end{center}
 
+\clearpage
+\subsubsection{Class \lstinline^scheduled_actor^}
+
+All scheduled actors inherit from \lstinline^scheduled_actor^. This includes statically and dynamically typed event-based actors as well as brokers \see{broker}.
+
+\begin{center}
+\small
+\begin{tabular}{ll}
+  \textbf{Types} & ~ \\
+  \hline
+  \lstinline^pointer^ & \lstinline^scheduled_actor*^ \\
+  \hline
+  \lstinline^exception_handler^ & \lstinline^function<error (pointer, std::exception_ptr&)>^ \\
+  \hline
+  \lstinline^default_handler^ & \lstinline^function<result<message> (pointer, message_view&)>^ \\
+  \hline
+  \lstinline^error_handler^ & \lstinline^function<void (pointer, error&)>^ \\
+  \hline
+  \lstinline^down_handler^ & \lstinline^function<void (pointer, down_msg&)>^ \\
+  \hline
+  \lstinline^exit_handler^ & \lstinline^function<void (pointer, exit_msg&)>^ \\
+  \hline
+  ~ & ~ \\ \textbf{Constructors} & ~ \\
+  \hline
+  \lstinline^(actor_config&)^ & Constructs the actor using a config. \\
+  \hline
+  ~ & ~ \\ \textbf{Termination} & ~ \\
+  \hline
+  \lstinline^quit()^ & Finishes execution of this actor without error (``normal exit reason''). \\
+  \hline
+  \lstinline^quit(error x)^ & Finishes execution of this actor with error \lstinline^x^. \\
+  \hline
+  ~ & ~ \\ \textbf{Special-purpose Handlers} & ~ \\
+  \hline
+  \lstinline^set_exception_handler(F f)^ & Installs \lstinline^f^ for converting exceptions to errors \see{error}. \\
+  \hline
+  \lstinline^set_down_handler(F f)^ & Installs \lstinline^f^ to handle down messages \see{down-message}. \\
+  \hline
+  \lstinline^set_exit_handler(F f)^ & Installs \lstinline^f^ to handle exit messages \see{exit-message}. \\
+  \hline
+  \lstinline^set_error_handler(F f)^ & Installs \lstinline^f^ to handle error messages (see \sref{error-message} and \sref{error}). \\
+  \hline
+  \lstinline^set_default_handler(F f)^ & Installs \lstinline^f^ as fallback message handler \see{default-handler}. \\
+  \hline
+\end{tabular}
+\end{center}
+
+\clearpage
+\subsubsection{Class \lstinline^blocking_actor^}
+
+A blocking actor always lives in its own thread of execution. They are not as lightweight as event-based actors and thus do not scale up to large numbers. The primary use case for blocking actors is to use a \lstinline^scoped_actor^ for ad-hoc communication to selected actors. Unlike scheduled actors, \lib does \textbf{not} dispatch system messages to special-purpose handlers. A blocking actors receives \emph{all} messages regularly through its mailbox. A blocking actor is considered \emph{done} only after it returned from \lstinline^act^ (or from the implementation in function-based actors). A \lstinline^scoped_actor^ sends its exit messages as part of its destruction.
+
+\begin{center}
+\small
+\begin{tabular}{ll}
+  \textbf{Types} & ~ \\
+  ~ & ~ \\ \textbf{Constructors} & ~ \\
+  \hline
+  \lstinline^(actor_config&)^ & Constructs the actor using a config. \\
+  \hline
+  ~ & ~ \\ \textbf{Customization Points} & ~ \\
+  \hline
+  \lstinline^void act()^ & Implements the behavior of the actor. \\
+  \hline
+  ~ & ~ \\ \textbf{Termination} & ~ \\
+  \hline
+  \lstinline^const error& fail_state()^ & Returns the current exit reason. \\
+  \hline
+  \lstinline^fail_state(error x)^ & Sends \lstinline^x^ to other actors as exit reason after this actor is done. \\
+  \hline
+  ~ & ~ \\ \textbf{Actor Management} & ~ \\
+  \hline
+  \lstinline^wait_for(Ts... xs)^ & Blocks until all actors \lstinline^xs...^ are done. \\
+  \hline
+  \lstinline^await_all_other_actors_done()^ & Blocks until all other actors are done. \\
+  \hline
+  ~ & ~ \\ \textbf{Message Handling} & ~ \\
+  \hline
+  \lstinline^receive(Ts... xs)^ & Receives a message using the callbacks \lstinline^xs...^. \\
+  \hline
+  \lstinline^receive_for(T& begin, T end)^ & See \sref{receive-loop}. \\
+  \hline
+  \lstinline^receive_while(F stmt)^ & See \sref{receive-loop}. \\
+  \hline
+  \lstinline^do_receive(Ts... xs)^ & See \sref{receive-loop}. \\
+  \hline
+\end{tabular}
+\end{center}
+
+\clearpage
 \subsection{Messaging Interfaces}
 \label{interface}
 
@@ -183,14 +288,14 @@ Note that \lstinline^operator()^ will take integral types as well as atom consta
 
 A behavior that combines the behaviors \lstinline^X^, \lstinline^Y^, and \lstinline^Z^ must inherit from \lstinline^composed_behavior<X, Y, Z>^ instead of inheriting from the three classes directly. In this step, CAF will set any \lstinline^operator()^ to pure virtual again that occurs in more than one base class. This ensures that all conflicts are properly resolved by the combining class. Any composable (or composed) state with no pure virtual member functions can be spawned directly through an actor system by calling \lstinline^system.spawn<...>()^, as shown below.
 
-\lstinputlisting[linerange={18-50}]{../examples/composition/calculator_behavior.cpp}
+\lstinputlisting[linerange={20-52}]{../examples/composition/calculator_behavior.cpp}
 
 \clearpage
 The second example illustrates how to use non-primitive values that are wrapped in a \lstinline^param<T>^ when working with composable behaviors. The purpose of \lstinline^param<T>^ is to provide a single interface for both constant and non-constant access. Constant access is modeled with the implicit conversion operator to \lstinline^const T&^, the member function \lstinline^get()^ and \lstinline^operator->^. 
 
 When acquiring mutable access to the represented value, CAF copies the value before allowing mutable access to it if more than one reference exists. This copy-on-write optimization avoids race conditions by design, while keeping copy operations to a minimum. A mutable reference is returned from the member functions \lstinline^get_mutable()^ and \lstinline^move()^. The latter is a convenience function for \lstinline^std::move(x.get_mutable())^. The following example illustrates how to use \lstinline^param<std::string>^ when implementing a simple dictionary.
 
-\lstinputlisting[linerange={22-46}]{../examples/composition/dictionary_behavior.cpp}
+\lstinputlisting[linerange={22-44}]{../examples/composition/dictionary_behavior.cpp}
 
 \subsection{Attaching Cleanup Code to Actors}
 \label{attach}
@@ -202,15 +307,15 @@ Users can attach cleanup code to actors. This code is executed immediately if th
 It is possible to attach code to remote actors. However, the cleanup code will run on the local machine.
 
 \subsection{Blocking Actors}
-\label{blocking-actors}
+\label{blocking-actor}
 
-Blocking actors always run in a separate thread and are not scheduled by \lib. Unlike event-based actors, blocking actors have explicit, blocking \emph{receive} functions.
+Blocking actors always run in a separate thread and are not scheduled by \lib. Unlike event-based actors, blocking actors have explicit, blocking \emph{receive} functions. Further, blocking actors do not handle system messages automatically via special-purpose callbacks \see{special-handler}. This gives users full control over the behavior of blocking actors. However, blocking actors still should follow conventions of the actor system. For example, actors should unconditionally terminate after receiving an \lstinline^exit_msg^ with reason \lstinline^exit_reason::kill^.
 
 \subsubsection{Receiving Messages}
 
 The function \lstinline^receive^ sequentially iterates over all elements in the mailbox beginning with the first.
 It takes a message handler that is applied to the elements in the mailbox until an element was matched by the handler.
-An actor calling \lstinline^receive^ is blocked until it successfully dequeued a message from its mailbox or an optional timeout occurs.
+An actor calling \lstinline^receive^ is blocked until it successfully dequeued a message from its mailbox or an optional timeout occurs. Messages that are not matched by the behavior are automatically skipped and remain in the mailbox.
 
 \begin{lstlisting}
 self->receive (
@@ -218,35 +323,48 @@ self->receive (
 );
 \end{lstlisting}
 
-The code snippet above illustrates the use of \lstinline^receive^.
-Note that the message handler passed to \lstinline^receive^ is a temporary object at runtime.
-Hence, calling \lstinline^receive^ inside a loop creates an unnecessary amount of short-lived objects.
-\lib provides three predefined receive loops to provide a more efficient way of defining loops.
+\subsubsection{Catch-all Receive Statements}
+\label{catch-all}
+
+Blocking actors can use inline catch-all callbacks instead of setting a default handler \see{default-handler}. A catch-all case must be the last callback before the optional timeout, must be prefixed with \lstinline^others >>^, and must have the signature \lstinline^result<message> (const type_erased_tuple*)^.
+
+The following example showcases a simple receive statement that expects a \lstinline^float^ and handles the system messages \lstinline^down_msg^ and \lstinline^exit_msg^. If neither of these three cases match, the actor reports an error back to the sender.
 
 \begin{lstlisting}
-// BAD
-for (;;) {
-  receive (
+self->receive(
+  [&](float x) {
     // ...
-  );
-}
-
-// GOOD
-receive_loop (
-  // ...
+  },
+  [&](const down_msg& x) {
+    // ...
+  },
+  [&](const exit_msg& x) {
+    // ...
+  },
+  others >> [](const type_erased_tuple* x) -> result<message> {
+    // report unexpected message back to client
+    return sec::unexpected_message;
+  }
 );
 \end{lstlisting}
+
+\clearpage
+\subsubsection{Receive Loops}
+\label{receive-loop}
+
+Message handler passed to \lstinline^receive^ are temporary object at runtime.
+Hence, calling \lstinline^receive^ inside a loop creates an unnecessary amount of short-lived objects.
+\lib provides predefined receive loops to allow for more efficient code.
 
 \begin{lstlisting}
 // BAD
 std::vector<int> results;
-for (size_t i = 0; i < 10; ++i) {
+for (size_t i = 0; i < 10; ++i)
   receive (
     [&](int value) {
       results.push_back(value);
     }
   );
-}
 
 // GOOD
 std::vector<int> results;
@@ -258,7 +376,27 @@ receive_for(i, 10) (
 );
 \end{lstlisting}
 
+\begin{lstlisting}
+// BAD
+size_t received = 0;
+while (received < 10) {
+  receive (
+    [&](int) {
+      ++received;
+    }
+  );
+} ;
+
+// GOOD
+size_t received = 0;
+receive_while([&] { return received < 10; }) (
+  [&](int) {
+    ++received;
+  }
+);
+\end{lstlisting}
 \clearpage
+
 \begin{lstlisting}
 // BAD
 size_t received = 0;
@@ -279,18 +417,20 @@ do_receive (
 ).until([&] { return received >= 10; });
 \end{lstlisting}
 
-The examples above illustrate the correct usage of the three loops \lstinline^receive_loop^, \lstinline^receive_for^ and \lstinline^do_receive(...).until^.
+The examples above illustrate the correct usage of the three loops \lstinline^receive_for^, \lstinline^receive_while^ and \lstinline^do_receive(...).until^.
 It is possible to nest receives and receive loops.
 
 \begin{lstlisting}
-self->receive_loop (
+bool running = true;
+self->receive_while([&] { return running; }) (
   [&](int value1) {
     self->receive (
       [&](float value2) {
         aout(self) << value1 << " => " << value2 << endl;
       }
     );
-  }
+  },
+  // ...
 );
 \end{lstlisting}
 
@@ -311,5 +451,3 @@ void test(actor_system& system) {
   // actor monitoring it will receive down messages etc.
 }
 \end{lstlisting}
-
-Note that \lstinline^scoped_actor^ throws an \lstinline^actor_exited^ exception when forced to quit for some reason, e.g., after receiving an \lstinline^exit_msg^ \see{exit-message}.

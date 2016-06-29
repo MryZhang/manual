@@ -33,7 +33,7 @@ In \lib, we use a different approach than the standard library because (1) we al
 
 Also, the control block in \lib is not a template and stores the identity of an actor (\lstinline^actor_id^ plus \lstinline^node_id^). This allows \lib to access this information even after an actor died. The control block fits exactly into a single cache line (64 Bytes). This makes sure no \emph{false sharing} occurs between an actor and other actors that have references to it. Since the size of the control block is fixed and \lib \emph{guarantees} the memory layout enforced by \lstinline^actor_storage^, \lib can compute the address of an actor from the pointer to its control block by offsetting it by 64 Bytes. Likewise, an actor can compute the address of its control block.
 
-The smart pointer design in \lib relies on a few assumptions about actor types. Most notably, the actor object is placed 64 Bytes after the control block. This starting address is cast to \lstinline^abstract_actor*^. Hence, \lstinline^T*^ must be convertible to \lstinline^abstract_actor*^ via \lstinline^reinterpret_cast^. In practice, this means actor subclasses must not use virtual inheritance, which is enforced by using a \lstinline^static_assert^.
+The smart pointer design in \lib relies on a few assumptions about actor types. Most notably, the actor object is placed 64 Bytes after the control block. This starting address is cast to \lstinline^abstract_actor*^. Hence, \lstinline^T*^ must be convertible to \lstinline^abstract_actor*^ via \lstinline^reinterpret_cast^. In practice, this means actor subclasses must not use virtual inheritance, which is enforced in \lib with a \lstinline^static_assert^.
 
 \subsection{Strong and Weak References}
 

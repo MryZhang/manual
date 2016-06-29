@@ -39,7 +39,7 @@ The implementation of \lstinline^to_string(error)^ is unable to call string conv
 
 The following code adds a rendering function to the actor system to provide a more satisfactory string conversion.
 
-\lstinputlisting[linerange={51-56}]{../examples/message_passing/divider.cpp}
+\lstinputlisting[linerange={50-58}]{../examples/message_passing/divider.cpp}
 
 With the custom rendering function, \lstinline^system.render(make_error(math_error::division_by_zero))^ returns \lstinline^"math_error(division_by_zero)"^.
 
@@ -49,7 +49,7 @@ With the custom rendering function, \lstinline^system.render(make_error(math_err
 
 System Error Codes (SECs) use the error category \lstinline^"system"^. They represent errors in the actor system or one of its modules and are defined as follows.
 
-\lstinputlisting[linerange={31-68}]{../libcaf_core/caf/sec.hpp}
+\lstinputlisting[linerange={31-81}]{../libcaf_core/caf/sec.hpp}
 
 \clearpage
 \subsection{Default Exit Reasons}

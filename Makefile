@@ -1,6 +1,6 @@
 HEVEA=hevea
 
-SOURCES=Actors.tex Brokers.tex CommonPitfalls.tex ConfiguringActorApplications.tex Error.tex FAQ.tex FirstSteps.tex GroupCommunication.tex Introduction.tex ManagingGroupsOfWorkers.tex MessageHandlers.tex MessagePassing.tex Messages.tex MigrationGuides.tex NetworkTransparency.tex ReferenceCounting.tex Registry.tex Scheduler.tex UsingAout.tex
+SOURCES=Actors.tex Brokers.tex CommonPitfalls.tex ConfiguringActorApplications.tex Error.tex FAQ.tex FirstSteps.tex GroupCommunication.tex Introduction.tex ManagingGroupsOfWorkers.tex MessageHandlers.tex MessagePassing.tex Messages.tex MigrationGuides.tex NetworkTransparency.tex ReferenceCounting.tex Registry.tex Scheduler.tex UsingAout.tex Utility.tex
 RST_FILES=$(SOURCES:.tex=.rst)
 
 # prevent make from building something without target

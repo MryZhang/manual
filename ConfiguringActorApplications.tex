@@ -104,8 +104,10 @@ Boolean options do not require arguments. The member variable \lstinline^server_
 
 INI files are organized in categories. No value is allowed outside of a category (no implicit ``global'' category). CAF reads \lstinline^true^ and \lstinline^false^ as boolean, numbers as (signed) integers or \lstinline^double^, \lstinline^"^-enclosed characters as strings, and \lstinline^'^-enclosed characters as atoms~\see{atom}. The following example INI file lists all standard options in \lib and their default value. Note that some options such as \lstinline^scheduler.max-threads^ are usually detected at runtime and thus have no hard-coded default.
 
+\clearpage
 \lstinputlisting[language=ini]{../examples/caf-application.ini}
 
+\clearpage
 \subsection{Adding Custom Message Types}
 
 \lib is designed with distributed systems in mind. Hence, all message types must be serializable and need a platform-neutral, unique name. Using a message type that is not serializable via a free function \lstinline^serialize^ causes a compiler error. Developers that use \lib for concurrency only can suppress this error by whitelisting non-serializable message types using the macro \lstinline^CAF_ALLOW_UNSAFE_MESSAGE_TYPE^:
