@@ -109,26 +109,21 @@ INI files are organized in categories. No value is allowed outside of a category
 
 \clearpage
 \subsection{Adding Custom Message Types}
+\label{add-custom-message-type}
 
-\lib is designed with distributed systems in mind. Hence, all message types must be serializable and need a platform-neutral, unique name. Using a message type that is not serializable via a free function \lstinline^serialize^ causes a compiler error. Developers that use \lib for concurrency only can suppress this error by whitelisting non-serializable message types using the macro \lstinline^CAF_ALLOW_UNSAFE_MESSAGE_TYPE^:
+\lib requires serialization support for all of its message types \see{type-inspection}. However, \lib also needs a mapping of unique type names to user-defined types at runtime. This is required to deserialize arbitrary messages from the network.
 
-\lstinputlisting[linerange={36-40}]{../libcaf_core/caf/allowed_unsafe_message_type.hpp}
+As an introductory example, we (again) use the following POD type \lstinline^foo^.
 
-\lib serializes objects by calling \lstinline^serialize(proc, x, 0)^, where the data processor \lstinline^proc^ is either a serializer or a deserializer. The third parameter is a \lstinline^const unsigned int^, which is never evaluated by \lib. The parameter exists for source compatibility with \lstinline^Boost.Serialize^. As an introductory example, we use the following POD type \lstinline^foo^.
+\lstinputlisting[linerange={24-27}]{../examples/custom_type/custom_types_1.cpp}
 
-\lstinputlisting[linerange={23-26}]{../examples/custom_type/custom_types_1.cpp}
+To make \lstinline^foo^ serializable, we make it inspectable \see{type-inspection}:
 
-To make \lstinline^foo^ serializable, we implement a free function \lstinline^serialize^. Serializers provide \lstinline^operator<<^, while deserializers provide \lstinline^operator>>^. Both types also allow \lstinline^operator&^ to allow users to write a single function covering loading and storing, as shown below.
+\lstinputlisting[linerange={30-34}]{../examples/custom_type/custom_types_1.cpp}
 
-\lstinputlisting[linerange={29-33}]{../examples/custom_type/custom_types_1.cpp}
+Finally, we give \lstinline^foo^ a platform-neutral name and add it to the list of serializable types by using a custom config class.
 
-Finally, we give \lstinline^foo^ a platform-neutral name and add it to the list of serializable types.
-
-\lstinputlisting[linerange={87-90,93-96}]{../examples/custom_type/custom_types_1.cpp}
-
-If loading and storing cannot be implemented in a single function, users can query whether the processor is loading or storing as shown below.
-
-\lstinputlisting[linerange={57-59,64-66}]{../examples/custom_type/custom_types_3.cpp}
+\lstinputlisting[linerange={75-78,81-84}]{../examples/custom_type/custom_types_1.cpp}
 
 \subsection{Adding Custom Error Types}
 

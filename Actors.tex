@@ -15,7 +15,7 @@ Statically typed actors require more source code but enable the compiler to veri
 Since CAF supports both, developers can freely mix both kinds of actors to get the best of both worlds.
 A good rule of thumb is to make use of static type checking for actors that are visible across multiple translation units.
 
-Actors that utilize the blocking receive API always require an exclusive thread of execution. Event-based actors, on the other hand, are usually scheduled cooperatively and are very lightweight with a memory footprint of only few hundred bytes. Developers can exclude---detach---event-based actors that potentially starve others from the cooperative scheduling while spawning it. A detached actor lives in its own thread of execution \see{spawn-options}.
+Actors that utilize the blocking receive API always require an exclusive thread of execution. Event-based actors, on the other hand, are usually scheduled cooperatively and are very lightweight with a memory footprint of only few hundred bytes. Developers can exclude---detach---event-based actors that potentially starve others from the cooperative scheduling while spawning it. A detached actor lives in its own thread of execution.
 
 \subsection{Environment / Actor Systems}
 \label{actor-system}
@@ -230,7 +230,7 @@ Both statically and dynamically typed actors are spawned from an \lstinline^acto
 
 Spawning an actor for each implementation is illustrated below.
 
-\lstinputlisting[linerange={131-136}]{../examples/message_passing/calculator.cpp}
+\lstinputlisting[linerange={140-145}]{../examples/message_passing/calculator.cpp}
 
 Additional arguments to \lstinline^spawn^ are passed to the constructor of a class or used as additional function arguments, respectively. In the example above, none of the three functions takes any argument other than the implicit but optional \lstinline^self^ pointer.
 
@@ -248,7 +248,7 @@ Event-based actors can either return a \lstinline^behavior^ \see{message-handler
 The following three functions implement the prototypes shown in~\sref{spawn} and illustrate one blocking actor and two event-based actors (statically and dynamically typed).
 
 \clearpage
-\lstinputlisting[linerange={31-65}]{../examples/message_passing/calculator.cpp}
+\lstinputlisting[linerange={31-72}]{../examples/message_passing/calculator.cpp}
 
 \clearpage
 \subsection{Class-based Actors}
@@ -274,7 +274,7 @@ The stateful actor API makes it easy to maintain state in function-based actors.
 
 Stateful actors are spawned in the same way as any other function-based actor \see{function-based}.
 
-\lstinputlisting[linerange={50-51}]{../examples/message_passing/cell.cpp}
+\lstinputlisting[linerange={49-50}]{../examples/message_passing/cell.cpp}
 
 \clearpage
 \subsection{Actors from Composable Behaviors \experimental}
