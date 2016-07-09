@@ -27,8 +27,6 @@ In \lib, we use a different approach than the standard library because (1) we al
 
 \singlefig{refcounting}{Shared pointer design in \lib}{actor-pointer}
 
-%TODO: sizing feels a bit off. `actor_storage<T>` has size 64 bytes + sizeof(T), but is smaller than the above block.
-
 \lib uses \lstinline^strong_actor_ptr^ instead of \lstinline^std::shared_ptr<...>^ and \lstinline^weak_actor_ptr^ instead of \lstinline^std::weak_ptr<...>^. Unlike the counterparts from the standard library, both smart pointer types only store a single pointer.
 
 Also, the control block in \lib is not a template and stores the identity of an actor (\lstinline^actor_id^ plus \lstinline^node_id^). This allows \lib to access this information even after an actor died. The control block fits exactly into a single cache line (64 Bytes). This makes sure no \emph{false sharing} occurs between an actor and other actors that have references to it. Since the size of the control block is fixed and \lib \emph{guarantees} the memory layout enforced by \lstinline^actor_storage^, \lib can compute the address of an actor from the pointer to its control block by offsetting it by 64 Bytes. Likewise, an actor can compute the address of its control block.

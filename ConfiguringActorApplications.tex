@@ -129,4 +129,30 @@ Finally, we give \lstinline^foo^ a platform-neutral name and add it to the list 
 
 Adding a custom error type to the system is a convenience feature to allow improve the string representation. Error types can be added by implementing a render function and passing it to \lstinline^add_error_category^, as shown in~\sref{custom-error}.
 
-%\subsection{Adding Custom Actor Types \experimental}
+\clearpage
+\subsection{Adding Custom Actor Types \experimental}
+\label{add-custom-actor-type}
+
+Adding actor types to the configuration allows users to spawn actors by their name. In particular, this enables spawning of actors on a different node \see{remote-spawn}. For our example configuration, we consider the following simple \lstinline^calculator^ actor.
+
+\lstinputlisting[linerange={33-40}]{../examples/remoting/remote_spawn.cpp}
+
+Adding the calculator actor type to our config is achieved by calling \lstinline^add_actor_type<T>^. Note that adding an actor type in this way implicitly calls \lstinline^add_message_type<T>^ for typed actors \see{add-custom-message-type}. This makes our \lstinline^calculator^ actor type serializable and also enables remote nodes to spawn calculators anywhere in the distributed actor system (assuming all nodes use the same config).
+
+\lstinputlisting[linerange={137-139,144-144,148-148}]{../examples/remoting/remote_spawn.cpp}
+
+Our final example illustrates how to spawn a \lstinline^calculator^ locally by using its type name. Because the dynamic type name lookup can fail and the construction arguments passed as message can mismatch, this version of \lstinline^spawn^ returns \lstinline^expected<T>^.
+
+\begin{lstlisting}
+auto x = system.spawn<calculator>("calculator", make_message());
+if (! x) {
+  std::cerr << "*** unable to spawn calculator: "
+            << system.render(x.error()) << std::endl;
+  return;
+}
+calculator c = std::move(*x);
+\end{lstlisting}
+
+Adding dynamically typed actors to the config is achieved in the same way. When spawning a dynamically typed actor in this way, the template parameter is simply \lstinline^actor^. For example, spawning an actor "foo" which requires one string is created with \lstinline^system.spawn<actor>("foo", make_message("bar"))^.
+
+Because constructor (or function) arguments for spawning the actor are stored in a \lstinline^message^, only actors with appropriate input types are allowed. For example, \lstinline^const char*^ arguments---or any other pointer type---are not allowed and must be replaced by \lstinline^std::string^.

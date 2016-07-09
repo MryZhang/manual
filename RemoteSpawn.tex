@@ -1,0 +1,8 @@
+\section{Remote Spawning of Actors \experimental}
+\label{remote-spawn}
+
+Remote spawning is an extension of the dynamic spawn using run-time type names \see{add-custom-actor-type}. The following example assumes a typed actor handle named \lstinline^calculator^ with an actor implementing this messaging interface named "calculator".
+
+\lstinputlisting[linerange={101-119}]{../examples/remoting/remote_spawn.cpp}
+
+We first connect to a CAF node with \lstinline^middleman().connect(host, port)^. This returns the node ID we need to pass to \lstinline^remote_spawn^. This requires the server to open a port with \lstinline^middleman().open(port)^. Alternatively, we can obtain the node ID from an already existing remote actor handle---returned from \lstinline^remote_actor^ for example---via \lstinline^hdl->node()^.
