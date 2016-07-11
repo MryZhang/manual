@@ -18,10 +18,13 @@ manual.html: $(SOURCES) variables.tex
 
 html: manual.html
 
+index.rst: manual.tex make_index_rst.py
+	cat manual.tex | ./make_index_rst.py > $@
+
 %.rst: %.tex variables.tex explode_lstinputlisting.py filter.py
 	cat colors.tex variables.tex newcommands.tex $< | ./explode_lstinputlisting.py | pandoc --filter=./filter.py --wrap=none --listings -f latex -o $@
 
-rst : $(RST_FILES)
+rst : $(RST_FILES) index.rst
 
 sphinx: conf.py rst
 	sphinx-build -b html . html
