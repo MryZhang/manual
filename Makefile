@@ -13,11 +13,6 @@ manual.pdf: $(SOURCES) variables.tex
 
 pdf: manual.pdf
 
-manual.html: $(SOURCES) variables.tex
-	hevea -fix manual
-
-html: manual.html
-
 index.rst: manual.tex make_index_rst.py
 	cat manual.tex | ./make_index_rst.py > $@
 

@@ -14,14 +14,10 @@
 \usepackage{xspace}
 \usepackage{tabularx}
 \usepackage{hyperref}
-%\usepackage{fancyhdr}
 \usepackage{multicol}
 \usepackage{capt-of}
 \usepackage{graphicx}
 \usepackage{float}
-
-% HTML compilation
-\usepackage{hevea}
 
 % font setup
 \usepackage{cmbright}
@@ -43,11 +39,7 @@
 \input{newcommands}
 \input{variables}
 
-\title{%
-%BEGIN LATEX
-\libtitle
-%END LATEX
-\libsubtitle}
+\title{\libtitle \libsubtitle}
 
 \author{Dominik Charousset}
 
@@ -62,10 +54,6 @@
 
 % include paragraphs in TOC
 \setcounter{tocdepth}{3}
-
-% some HEVEA / HTML style sheets
-\newstyle{body}{width:800px;margin:auto;padding-top:20px;text-align: justify;}
-\newstyle{hr}{margin-top:10px;border-style:none;}
 
 % more compact itemize
 \newenvironment{itemize*}%
@@ -84,7 +72,6 @@
 \pagestyle{plain}
 
 % new highlight for INI file syntax
-\begin{latexonly}
 \lstdefinelanguage{ini}{%
   basicstyle=\ttfamily\footnotesize,%
 %  columns=fullflexible,%
@@ -99,7 +86,6 @@
   keywordstyle=\color{blue},%
   stringstyle=\color{darkgreen},%
 }
-\end{latexonly}
 
 % code listings setup
 \lstset{%
@@ -117,7 +103,6 @@
   xleftmargin=20pt,
 }
 
-%BEGIN LATEX
 \lstset{
   numberstyle=\tiny,
   numbers=left,
@@ -129,7 +114,6 @@
   framesep=15pt,
   fillcolor=\color{lightgrey},
 }
-%END LATEX
 
 % content
 \part{Core Library}
