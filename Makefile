@@ -1,6 +1,4 @@
-HEVEA=hevea
-
-SOURCES=Actors.tex Brokers.tex CommonPitfalls.tex ConfiguringActorApplications.tex Error.tex FAQ.tex FirstSteps.tex GroupCommunication.tex Introduction.tex ManagingGroupsOfWorkers.tex MessageHandlers.tex MessagePassing.tex Messages.tex MigrationGuides.tex NetworkTransparency.tex ReferenceCounting.tex Registry.tex Scheduler.tex UsingAout.tex Utility.tex TypeInspection.tex
+SOURCES=Actors.tex Brokers.tex CommonPitfalls.tex ConfiguringActorApplications.tex Error.tex FAQ.tex FirstSteps.tex GroupCommunication.tex Introduction.tex ManagingGroupsOfWorkers.tex MessageHandlers.tex MessagePassing.tex Messages.tex MigrationGuides.tex NetworkTransparency.tex ReferenceCounting.tex Registry.tex Scheduler.tex UsingAout.tex Utility.tex TypeInspection.tex RemoteSpawn.tex
 RST_FILES=$(SOURCES:.tex=.rst)
 
 # prevent make from building something without target
@@ -13,7 +11,7 @@ manual.pdf: $(SOURCES) variables.tex
 
 pdf: manual.pdf
 
-index.rst: manual.tex make_index_rst.py
+index.rst: manual.tex make_index_rst.py index_header.rst index_footer.rst
 	cat manual.tex | ./make_index_rst.py > $@
 
 %.rst: %.tex variables.tex explode_lstinputlisting.py filter.py

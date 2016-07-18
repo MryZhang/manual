@@ -7,16 +7,10 @@ import re
 import sys
 
 def print_header():
-  sys.stdout.write("Welcome to CAF's documentation!\n"
-                   "===============================\n")
+  sys.stdout.write(".. include:: index_header.rst\n")
 
 def print_footer():
-  sys.stdout.write("\n"
-                   "Indices and tables\n"
-                   "==================\n"
-                   "\n"
-                   "* :ref:`genindex`\n"
-                   "* :ref:`search`\n")
+  sys.stdout.write("\n.. include:: index_footer.rst\n")
 
 part_rx = re.compile(r"\\part{(.+)}")
 include_rx = re.compile(r"\\include{(.+)}")
