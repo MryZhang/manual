@@ -284,16 +284,18 @@ When building larger systems, it is often useful to implement the behavior of an
 
 The base type for composable behaviors is \lstinline^composable_behavior<T>^, where \lstinline^T^ is a \lstinline^typed_actor<...>^. \lib maps each \lstinline^replies_to<A, B, C>::with<D, E, F>^ in \lstinline^T^ to a pure virtual member function with signature \lstinline^result<D, E, F> operator()(param<A>, param<B>, param<C>)^.
 
-Note that \lstinline^operator()^ will take integral types as well as atom constants by value instead of by reference. A \lstinline^result<T>^ accepts either a value of type \lstinline^T^, a \lstinline^skip_t^ \see{default-handler}, an \lstinline^error^ \see{error}, a \lstinline^delegated<T>^ \see{delegate}, or a \lstinline^response_promise<T>^ \see{promise}. A \lstinline^result<void>^ is constructed by returning \lstinline^unit^.
+Note that \lstinline^operator()^ will take integral types as well as atom constants simply by value. A \lstinline^result<T>^ accepts either a value of type \lstinline^T^, a \lstinline^skip_t^ \see{default-handler}, an \lstinline^error^ \see{error}, a \lstinline^delegated<T>^ \see{delegate}, or a \lstinline^response_promise<T>^ \see{promise}. A \lstinline^result<void>^ is constructed by returning \lstinline^unit^.
 
-A behavior that combines the behaviors \lstinline^X^, \lstinline^Y^, and \lstinline^Z^ must inherit from \lstinline^composed_behavior<X, Y, Z>^ instead of inheriting from the three classes directly. In this step, CAF will set any \lstinline^operator()^ to pure virtual again that occurs in more than one base class. This ensures that all conflicts are properly resolved by the combining class. Any composable (or composed) state with no pure virtual member functions can be spawned directly through an actor system by calling \lstinline^system.spawn<...>()^, as shown below.
+A behavior that combines the behaviors \lstinline^X^, \lstinline^Y^, and \lstinline^Z^ must inherit from \lstinline^composed_behavior<X, Y, Z>^ instead of inheriting from the three classes directly. The class \lstinline^composed_behavior^ ensures that the behaviors are concatenated correctly. In case one message handler is defined in multiple base types, the \emph{first} type in declaration order ``wins''. For example, if \lstinline^X^ and \lstinline^Y^ both implement the interface \lstinline^replies_to<int, int>::with<int>^, only the handler implemented in \lstinline^X^ is active.
+
+Any composable (or composed) behavior with no pure virtual member functions can be spawned directly through an actor system by calling \lstinline^system.spawn<...>()^, as shown below.
 
 \lstinputlisting[linerange={20-52}]{../examples/composition/calculator_behavior.cpp}
 
 \clearpage
 The second example illustrates how to use non-primitive values that are wrapped in a \lstinline^param<T>^ when working with composable behaviors. The purpose of \lstinline^param<T>^ is to provide a single interface for both constant and non-constant access. Constant access is modeled with the implicit conversion operator to \lstinline^const T&^, the member function \lstinline^get()^ and \lstinline^operator->^. 
 
-When acquiring mutable access to the represented value, CAF copies the value before allowing mutable access to it if more than one reference exists. This copy-on-write optimization avoids race conditions by design, while keeping copy operations to a minimum. A mutable reference is returned from the member functions \lstinline^get_mutable()^ and \lstinline^move()^. The latter is a convenience function for \lstinline^std::move(x.get_mutable())^. The following example illustrates how to use \lstinline^param<std::string>^ when implementing a simple dictionary.
+When acquiring mutable access to the represented value, CAF copies the value before allowing mutable access to it if more than one reference to the value exists. This copy-on-write optimization avoids race conditions by design, while minimizing copy operations. A mutable reference is returned from the member functions \lstinline^get_mutable()^ and \lstinline^move()^. The latter is a convenience function for \lstinline^std::move(x.get_mutable())^. The following example illustrates how to use \lstinline^param<std::string>^ when implementing a simple dictionary.
 
 \lstinputlisting[linerange={22-44}]{../examples/composition/dictionary_behavior.cpp}
 
