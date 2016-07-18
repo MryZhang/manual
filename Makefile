@@ -14,7 +14,7 @@ pdf: manual.pdf
 index.rst: manual.tex make_index_rst.py index_header.rst index_footer.rst
 	cat manual.tex | ./make_index_rst.py > $@
 
-%.rst: %.tex variables.tex explode_lstinputlisting.py filter.py
+%.rst: %.tex variables.tex newcommands.tex explode_lstinputlisting.py filter.py
 	cat colors.tex variables.tex newcommands.tex $< | ./explode_lstinputlisting.py | pandoc --filter=./filter.py --wrap=none --listings -f latex -o $@
 
 rst : $(RST_FILES) index.rst
