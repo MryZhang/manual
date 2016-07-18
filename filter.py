@@ -33,6 +33,10 @@ def behead(key, value, format, meta):
       return [rb(new_lbl), Header(value[0], value[1], value[2])]
   # fix two bugs with string parsing
   elif key == 'Str':
+    # pandoc does not parse \xpsace correctly -> insert whitespace after CAF
+    if last_element == ('Str', 'CAF') and value.isalnum():
+      store(key, value)
+      return [Space(), Str(value)]
     if len(value) > 3:
       # pandoc generates [refname] as strings for \ref{refname} -> fix
       if value[0] == '[':
@@ -41,14 +45,6 @@ def behead(key, value, format, meta):
       elif value[1] == '[':
         store(key, value)
         return mk_ref(value[2:-1])
-      # pandoc does not parse \xpsace correctly -> insert whitespace
-      elif last_element == ('Str', 'CAF') and value != '.' and value != ',':
-        store(key, value)
-        return [Space(), Str(value)]
-      elif value.startswith('CAF'):# and value[3] != '.' and value[3] != ',':
-        store(key, value)
-        return Str("nooooo")
-        #return [Str('CAF'), Space(), Str(value[3:])]
   # images don't have file endings in .tex -> add .png
   elif key == 'Image':
     store(key, value)
