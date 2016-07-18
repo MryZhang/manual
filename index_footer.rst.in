@@ -1,6 +1,8 @@
-GIT SHA
-=======
+Version Information
+===================
 
-This document was automatically generated from Git commit
-`@CAF_SHA@ <https://github.com/actor-framework/actor-framework/commit/@CAF_SHA@>`_.
+This version of the Manual was automatically generated from CAF commit
+`@CAF_SHA@ <https://github.com/actor-framework/actor-framework/commit/@CAF_SHA@>`_
+and Manual commit
+`@CAF_MANUAL_SHA@ <https://github.com/actor-framework/manual/commit/@CAF_MANUAL_SHA@>`_.
 

@@ -5,5 +5,5 @@
 }
 
 \newcommand{\libsubtitle}{%
-User Manual\\\normalsize{version @CAF_RELEASE@}\vfill%
+User Manual\\\normalsize{Version @CAF_RELEASE@}\\~\\~\\\tiny CAF SHA @CAF_SHA@\\Manual SHA @CAF_MANUAL_SHA@\vfill%
 }
