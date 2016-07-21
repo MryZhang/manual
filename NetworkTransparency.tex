@@ -13,9 +13,7 @@ The middleman is the main component of the I/O module and enables distribution. 
   \hline
   \lstinline^expected<void> unpublish(T x, uint16)^ & See~\sref{remoting}. \\
   \hline
-  \lstinline^expected<actor> remote_actor(string, uint16)^ & See~\sref{remoting}. \\
-  \hline
-  \lstinline^expected<T> typed_remote_actor(string, uint16)^ & See~\sref{remoting}. \\
+  \lstinline^expected<T> remote_actor<T = actor>(string, uint16)^ & See~\sref{remoting}. \\
   \hline
   \lstinline^expected<T> spawn_broker(F fun, ...)^ & See~\sref{broker}. \\
   \hline
@@ -56,13 +54,11 @@ The function returns an \lstinline^error^ \see{error} if the actor was not bound
 
 \clearpage
 \begin{lstlisting}
-expected<actor> middleman::remote_actor(std::string host, uint16_t port);
-
-template <class ActorHandle>
-expected<ActorHandle> middleman::typed_remote_actor(std::string host, uint16_t port);
+template<class T = actor>
+expected<T> middleman::remote_actor(std::string host, uint16_t port);
 \end{lstlisting}
 
-After a server has published an actor with \lstinline^publish^, clients can connect to the published actor by calling \lstinline^remote_actor^ or \lstinline^typed_remote_actor^:
+After a server has published an actor with \lstinline^publish^, clients can connect to the published actor by calling \lstinline^remote_actor^:
 
 \begin{lstlisting}
 // node A
