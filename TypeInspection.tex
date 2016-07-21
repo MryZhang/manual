@@ -26,7 +26,7 @@ The following concept class shows the requirements for inspectors. The placehold
 Inspector {
   using result_type = T;
   
-  if (inspector only requires read access to T's state)
+  if (inspector only requires read access to the state of T)
     static constexpr bool reads_state = true;
   else
     static constexpr bool writes_state = true;
@@ -36,7 +36,7 @@ Inspector {
 }
 \end{lstlisting}
 
-A saving \lstinline^Inspector^ is required to handle constant lvalue reference and rvalue references. A loading \lstinline^Inspector^ must only accept mutable lvalue references to data fields, but still allow for constant lvalue references and rvalue references to annotations.
+A saving \lstinline^Inspector^ is required to handle constant lvalue and rvalue references. A loading \lstinline^Inspector^ must only accept mutable lvalue references to data fields, but still allow for constant lvalue references and rvalue references to annotations.
 
 \subsection{Annotations}
 

@@ -140,8 +140,7 @@ A blocking actor always lives in its own thread of execution. They are not as li
 \begin{center}
 \small
 \begin{tabular}{ll}
-  \textbf{Types} & ~ \\
-  ~ & ~ \\ \textbf{Constructors} & ~ \\
+  \textbf{Constructors} & ~ \\
   \hline
   \lstinline^(actor_config&)^ & Constructs the actor using a config. \\
   \hline
@@ -199,7 +198,8 @@ Further, actor handles of type \lstinline^A^ are assignable to handles of type \
 
 For convenience, the class \lstinline^typed_actor<...>^ defines the member types shown below to grant access to derived types.
 
-{\small
+\begin{center}
+\small
 \begin{tabular}{ll}
   \textbf{Types} & ~ \\
   \hline
@@ -218,7 +218,7 @@ For convenience, the class \lstinline^typed_actor<...>^ defines the member types
   \lstinline^extend_with<Other>^ & Extend this typed actor with all cases from \lstinline^Other^. \\
   \hline
 \end{tabular}
-}
+\end{center}
 
 \clearpage
 \subsection{Spawning Actors}
