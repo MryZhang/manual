@@ -35,11 +35,12 @@ The smart pointer design in \lib relies on a few assumptions about actor types. 
 
 \subsection{Strong and Weak References}
 
-A \emph{strong} reference manipulates the \lstinline^strong refs^ counter shown agove. An actor is destroyed if there are \emph{zero} strong references to it. If two actors keep strong references to each other via member variable, neither actor can ever be destroyed because they produce a cycle \see{breaking-cycles}. Strong references are formed by \lstinline^strong_actor_ptr^, \lstinline^actor^, and \lstinline^typed_actor<...>^ \see{actor-reference}.
+A \emph{strong} reference manipulates the \lstinline^strong refs^ counter as shown above. An actor is destroyed if there are \emph{zero} strong references to it. If two actors keep strong references to each other via member variable, neither actor can ever be destroyed because they produce a cycle \see{breaking-cycles}. Strong references are formed by \lstinline^strong_actor_ptr^, \lstinline^actor^, and \lstinline^typed_actor<...>^ \see{actor-reference}.
 
 A \emph{weak} reference manipulates the \lstinline^weak refs^ counter. This counter keeps track of how many references to the control block exist. The control block is destroyed if there are \emph{zero} weak references to an actor (which cannot occur before \lstinline^strong refs^ reached \emph{zero} as well). No cycle occurs if two actors keep weak references to each other, because the actor objects themselves can get destroyed independently from their control block.  A weak reference is only formed by \lstinline^actor_addr^ \see{actor-address}.
 
 \subsection{Converting Actor References with \texttt{actor\_cast}}
+\label{actor-cast}
 
 The function \lstinline^actor_cast^ converts between actor pointers and handles. The first common use case is to convert a \lstinline^strong_actor_ptr^ to either \lstinline^actor^ or \lstinline^typed_actor<...>^ before being able to send messages to an actor. The second common use case is to convert \lstinline^actor_addr^ to \lstinline^strong_actor_ptr^ to upgrade a weak reference to a strong reference. Note that \lstinline^actor_addr^ can \emph{not} be converted to an actor handle directly, because handles are guaranteed to be non-null and the upgrade fails (returns null) if the actor already reached zero strong references and was destroyed.
 
