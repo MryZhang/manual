@@ -3,6 +3,6 @@
 
 Remote spawning is an extension of the dynamic spawn using run-time type names \see{add-custom-actor-type}. The following example assumes a typed actor handle named \lstinline^calculator^ with an actor implementing this messaging interface named "calculator".
 
-\lstinputlisting[linerange={101-119}]{../examples/remoting/remote_spawn.cpp}
+\lstinputlisting[linerange={124-142}]{../examples/remoting/remote_spawn.cpp}
 
-We first connect to a CAF node with \lstinline^middleman().connect(host, port)^. On success, \lstinline^connect^ returns the node ID we need for \lstinline^remote_spawn^. This requires the server to open a port with \lstinline^middleman().open(port)^ or \lstinline^middleman().publish(..., port)^. Alternatively, we can obtain the node ID from an already existing remote actor handle---returned from \lstinline^remote_actor^ for example---via \lstinline^hdl->node()^. After connecting to the server, we can use \lstinline^middleman().remote_spawn<...>(...)^ to create actors remotely. 
+We first connect to a CAF node with \lstinline^middleman().connect(host, port)^. On success, \lstinline^connect^ returns the node ID we need for \lstinline^remote_spawn^. This requires the server to open a port with \lstinline^middleman().open(port)^ or \lstinline^middleman().publish(..., port)^. Alternatively, we can obtain the node ID from an already existing remote actor handle---returned from \lstinline^remote_actor^ for example---via \lstinline^hdl->node()^. After connecting to the server, we can use \lstinline^middleman().remote_spawn<...>(...)^ to create actors remotely.
