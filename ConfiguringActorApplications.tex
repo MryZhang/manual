@@ -92,7 +92,7 @@ The third option is to simply call \lstinline^x.load<mod1>()^ on a config object
 
 \lib organizes program options in categories and parses CLI arguments as well as INI files. CLI arguments override values in the INI file which override hard-coded defaults. Users can add any number of custom program options by implementing a subtype of \lstinline^actor_system_config^. The example below adds three options to the ``global'' category.
 
-\lstinputlisting[linerange={250-262}]{../examples/remoting/distributed_calculator.cpp}
+\lstinputlisting[linerange={221-233}]{../examples/remoting/distributed_calculator.cpp}
 
 The line \lstinline^opt_group{custom_options_, "global"}^ adds the ``global'' category to the config parser. The following calls to \lstinline^add^ then append individual options to the category. The first argument to \lstinline^add^ is the associated variable. The second argument is the name for the parameter, optionally suffixed with a comma-separated single-character short name. The short name is only considered for CLI parsing and allows users to abbreviate commonly used option names. The third and final argument to \lstinline^add^ is a help text.
 
