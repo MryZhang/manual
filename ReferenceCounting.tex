@@ -42,9 +42,7 @@ A \emph{weak} reference manipulates the \lstinline^weak refs^ counter. This coun
 \subsection{Converting Actor References with \texttt{actor\_cast}}
 \label{actor-cast}
 
-The function \lstinline^actor_cast^ converts between actor pointers and handles. The first common use case is to convert a \lstinline^strong_actor_ptr^ to either \lstinline^actor^ or \lstinline^typed_actor<...>^ before being able to send messages to an actor. The second common use case is to convert \lstinline^actor_addr^ to \lstinline^strong_actor_ptr^ to upgrade a weak reference to a strong reference. Note that \lstinline^actor_addr^ can \emph{not} be converted to an actor handle directly, because handles are guaranteed to be non-null and the upgrade fails (returns null) if the actor already reached zero strong references and was destroyed.
-
-The syntax for \lstinline^actor_cast^ resembles builtin C++ casts. For example, \lstinline^actor_cast<actor>(x)^ converts \lstinline^x^ to an handle of type \lstinline^actor^. Users should never cast a \lstinline^strong_actor_ptr^ to a handle if it is null. Creating a ``null~handle'' in this way causes undefined behavior (dereferencing null).
+The function \lstinline^actor_cast^ converts between actor pointers and handles. The first common use case is to convert a \lstinline^strong_actor_ptr^ to either \lstinline^actor^ or \lstinline^typed_actor<...>^ before being able to send messages to an actor. The second common use case is to convert \lstinline^actor_addr^ to \lstinline^strong_actor_ptr^ to upgrade a weak reference to a strong reference. Note that casting \lstinline^actor_addr^ to a strong actor pointer or handle can result in invalid handles. The syntax for \lstinline^actor_cast^ resembles builtin C++ casts. For example, \lstinline^actor_cast<actor>(x)^ converts \lstinline^x^ to an handle of type \lstinline^actor^.
 
 \subsection{Breaking Cycles Manually}
 \label{breaking-cycles}

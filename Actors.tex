@@ -295,7 +295,7 @@ Any composable (or composed) behavior with no pure virtual member functions can 
 \clearpage
 The second example illustrates how to use non-primitive values that are wrapped in a \lstinline^param<T>^ when working with composable behaviors. The purpose of \lstinline^param<T>^ is to provide a single interface for both constant and non-constant access. Constant access is modeled with the implicit conversion operator to \lstinline^const T&^, the member function \lstinline^get()^ and \lstinline^operator->^. 
 
-When acquiring mutable access to the represented value, CAF copies the value before allowing mutable access to it if more than one reference to the value exists. This copy-on-write optimization avoids race conditions by design, while minimizing copy operations. A mutable reference is returned from the member functions \lstinline^get_mutable()^ and \lstinline^move()^. The latter is a convenience function for \lstinline^std::move(x.get_mutable())^. The following example illustrates how to use \lstinline^param<std::string>^ when implementing a simple dictionary.
+When acquiring mutable access to the represented value, CAF copies the value before allowing mutable access to it if more than one reference to the value exists. This copy-on-write optimization avoids race conditions by design, while minimizing copy operations \see{copy-on-write}. A mutable reference is returned from the member functions \lstinline^get_mutable()^ and \lstinline^move()^. The latter is a convenience function for \lstinline^std::move(x.get_mutable())^. The following example illustrates how to use \lstinline^param<std::string>^ when implementing a simple dictionary.
 
 \lstinputlisting[linerange={22-44}]{../examples/composition/dictionary_behavior.cpp}
 
