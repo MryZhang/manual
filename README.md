@@ -8,6 +8,7 @@ directory:
 git clone https://github.com/actor-framework/actor-framework.git
 cd actor-framework
 git clone https://github.com/actor-framework/manual.git
+./configure
 cd manual
 # build individual targets:
 make pdf
@@ -23,4 +24,4 @@ The single-page HTML version for the `html` target requires
 [HeVeA](http://hevea.inria.fr).
 
 The multi-page [Read the Docs](https://readthedocs.org) HTML version for the
-`sphinx` target requires Python, Pandoc, and Sphinx.
+`sphinx` target requires Python, Pandoc, the pandocfilters Python module, and Sphinx.
