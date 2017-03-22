@@ -47,7 +47,7 @@ Requirement 2 is a consequence of requirement 1, because \lib needs to be able t
 \subsubsection{Down  Handler}
 \label{down-message}
 
-Actors can monitor the lifetime of other actors by calling \lstinline^self->monitor(other)^. This will cause the runtime system of \lib to send a \lstinline^down_msg^ for \lstinline^other^ if it dies. Actors drop down messages unless they provide a custom handler via \lstinline^set_down_handler(f)^, where \lstinline^f^ is a function object with signature \lstinline^void (down_message&)^ or \lstinline^void (scheduled_actor*, down_message&)^. The latter signature allows users to implement down message handlers as free function.
+Actors can monitor the lifetime of other actors by calling \lstinline^self->monitor(other)^. This will cause the runtime system of \lib to send a \lstinline^down_msg^ for \lstinline^other^ if it dies. Actors drop down messages unless they provide a custom handler via \lstinline^set_down_handler(f)^, where \lstinline^f^ is a function object with signature \lstinline^void (down_msg&)^ or \lstinline^void (scheduled_actor*, down_msg&)^. The latter signature allows users to implement down message handlers as free function.
 
 \subsubsection{Exit Handler}
 \label{exit-message}
