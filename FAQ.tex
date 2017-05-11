@@ -22,3 +22,19 @@ for (auto& str : strings)
 // create the message
 message msg = mb.to_message();
 \end{lstlisting}
+
+\subsection{What Debugging Tools Exist?}
+
+The \lstinline^scripts/^ and \lstinline^tools/^ directories contain some useful tools to aid in development and debugging.
+
+\lstinline^scripts/atom.py^ converts integer atom values back into strings.
+
+\lstinline^scripts/demystify.py^ replaces cryptic \lstinline^typed_mpi<...>^ templates with \lstinline^replies_to<...>::with<...>^
+and \lstinline^atom_constant<...>^ with a human-readable representation of the actual atom.
+
+\lstinline^scripts/caf-prof^ is an R script that generates plots from CAF profiler output.
+
+\lstinline^caf-vec^ is a (highly) experimental tool that annotates CAF logs with vector timestamps. It gives you happens-before
+relations and a nice visualization via \href{https://bestchai.bitbucket.io/shiviz/}{ShiViz}. There is an associated
+\href{https://github.com/actor-framework/rfcs/blob/master/proposals/0001-minimal-debugging-and-shiviz-support.md}{RFC} for more information on
+caf-vec.
