@@ -9,9 +9,13 @@ The middleman is the main component of the I/O module and enables distribution. 
 \begin{tabular}{ll}
   \textbf{Remoting} & ~ \\
   \hline
+  \lstinline^expected<uint16> open(uint16, const char*, bool)^ & See~\sref{remoting}. \\
+  \hline
   \lstinline^expected<uint16> publish(T, uint16, const char*, bool)^ & See~\sref{remoting}. \\
   \hline
   \lstinline^expected<void> unpublish(T x, uint16)^ & See~\sref{remoting}. \\
+  \hline
+  \lstinline^expected<node_id> connect(std::string host, uint16_t port)^ & See~\sref{remoting}. \\
   \hline
   \lstinline^expected<T> remote_actor<T = actor>(string, uint16)^ & See~\sref{remoting}. \\
   \hline
@@ -76,3 +80,26 @@ if (! ping) {
 \end{lstlisting}
 
 There is no difference between server and client after the connection phase. Remote actors use the same handle types as local actors and are thus fully transparent.
+
+The function pair \lstinline^open^ and \lstinline^connect^ allows users to connect CAF instances without remote actor setup. The function \lstinline^connect^ returns a \lstinline^node_id^ that can be used for remote spawning (see~\sref{remote-spawn}).
+
+\subsection{Free Functions}
+\label{free-remoting-functions}
+
+The following free functions in the namespace \lstinline^caf::io^ avoid calling the middleman directly. This enables users to easily switch between communication backends as long as the interfaces have the same signatures. For example, the (experimental) OpenSSL binding of CAF implements the same functions in the namespace \lstinline^caf::openssl^ to easily switch between encrypted and unencrypted communication.
+
+\begin{center}\small
+\begin{tabular}{ll}
+  \hline
+  \lstinline^expected<uint16> open(actor_system&, uint16, const char*, bool)^ & See~\sref{remoting}. \\
+  \hline
+  \lstinline^expected<uint16> publish(T, uint16, const char*, bool)^ & See~\sref{remoting}. \\
+  \hline
+  \lstinline^expected<void> unpublish(T x, uint16)^ & See~\sref{remoting}. \\
+  \hline
+  \lstinline^expected<node_id> connect(actor_system&, std::string host, uint16_t port)^ & See~\sref{remoting}. \\
+  \hline
+  \lstinline^expected<T> remote_actor<T = actor>(actor_system&, string, uint16)^ & See~\sref{remoting}. \\
+  \hline
+\end{tabular}
+\end{center}
